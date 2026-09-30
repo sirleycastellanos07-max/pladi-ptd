@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calendario Académico | PLADI-PTD</title>
+
+    
+    <link rel="stylesheet" href="css/calendario.css">
+</head>
+
+<body>
+
+    <main class="calendario">
+
+        
+        <header class="calendario__cabecera">
+
+            <div>
+                <p class="calendario__subtitulo">
+                    PLADI-PTD
+                </p>
+
+                <h1 class="calendario__titulo">
+                    Calendario Académico
+                </h1>
+
+                <p class="calendario__descripcion">
+                    Consulta las actividades y eventos importantes
+                    de la modalidad de Programación y Tecnologías Digitales.
+                </p>
+            </div>
+
+        </header>
+
+
+        
+        <section class="calendario__controles">
+
+            <button
+                class="calendario__boton"
+                id="mesAnterior"
+                aria-label="Mes anterior">
+                ◀
+            </button>
+
+            <h2
+                class="calendario__mes"
+                id="mesActual">
+                Julio 2026
+            </h2>
+
+            <button
+                class="calendario__boton"
+                id="mesSiguiente"
+                aria-label="Mes siguiente">
+                ▶
+            </button>
+
+        </section>
+
+
+        
+        <section class="calendario__semana">
+
+            <div>Dom</div>
+            <div>Lun</div>
+            <div>Mar</div>
+            <div>Mié</div>
+            <div>Jue</div>
+            <div>Vie</div>
+            <div>Sáb</div>
+
+        </section>
+
+
+        
+        <section
+            class="calendario__dias"
+            id="diasCalendario">
+
+            <!-- JavaScript generará los días aquí -->
+
+        </section>
+
+
+        
+        <section class="calendario__leyenda">
+
+            <h3>Eventos académicos</h3>
+
+            <div class="leyenda__elementos">
+
+                <div class="leyenda__item">
+                    <span class="leyenda__color leyenda__color--verde"></span>
+                    <span>Actividad académica</span>
+                </div>
+
+                <div class="leyenda__item">
+                    <span class="leyenda__color leyenda__color--amarillo"></span>
+                    <span>Entrega</span>
+                </div>
+
+                <div class="leyenda__item">
+                    <span class="leyenda__color leyenda__color--negro"></span>
+                    <span>Reunión</span>
+                </div>
+
+                <div class="leyenda__item">
+                    <span class="leyenda__color leyenda__color--gris"></span>
+                    <span>Evento institucional</span>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    
+    <script src="js/calendario.js"></script>
+
+</body>
+
+</html>
