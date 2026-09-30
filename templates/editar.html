@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar proyecto - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>PLADI-PTD</h1>
+            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/proyectos">Proyectos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="login-contenedor">
+        <div class="tarjeta-seccion">
+            <h3>Editar mi proyecto</h3>
+
+            <form method="POST" action="/proyecto/{{ proyecto[0] }}/editar">
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" value="{{ proyecto[1] }}" required>
+
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="5">{{ proyecto[2] }}</textarea>
+
+                <label for="objetivo_general">Objetivo general</label>
+                <textarea id="objetivo_general" name="objetivo_general" rows="5">{{ proyecto[3] }}</textarea>
+                <label>Integrantes</label>
+                {% for i in integrantes %}
+                    <input type="text" name="integrantes[]" value="{{ i[0] }}">
+                {% endfor %}
+                <input type="text" name="integrantes[]" placeholder="Agregar otro integrante...">
+                <input type="text" name="integrantes[]" placeholder="Agregar otro integrante...">
+
+                <label>Objetivos específicos</label>
+                {% for o in objetivos %}
+                    <input type="text" name="objetivos[]" value="{{ o[0] }}">
+                {% endfor %}
+                <input type="text" name="objetivos[]" placeholder="Agregar otro objetivo...">
+                <input type="text" name="objetivos[]" placeholder="Agregar otro objetivo...">
+
+                <button type="submit" class="btn-principal">Guardar cambios</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar proyecto - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>PLADI-PTD</h1>
+            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/proyectos">Proyectos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="login-contenedor">
+        <div class="tarjeta-seccion">
+            <h3>Registrar mi proyecto</h3>
+
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" action="/registro">
+                <label for="titulo">Título del proyecto</label>
+                <input type="text" id="titulo" name="titulo" required>
+
+                <label for="grado">Grado</label>
+                <input type="text" id="grado" name="grado" placeholder="Ej: 1103" required>
+
+                <label for="grupo">Número de grupo</label>
+                <input type="text" id="grupo" name="grupo" placeholder="Ej: 5" required>
+
+                <label for="usuario">Nombre de usuario</label>
+                <input type="text" id="usuario" name="usuario" required>
+
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+
+                <button type="submit" class="btn-principal">Crear mi proyecto</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

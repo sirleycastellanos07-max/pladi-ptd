@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+   
+</head>
+ <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+<body>
+    <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+            <li><a href="#">Calendario</a></li>
+            <li><a href="#">Nosotros</a></li>
+                            {% if session.usuario %}
+                    <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
+                    <li><a href="/logout">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="/login">Iniciar sesión</a></li>
+                {% endif %}
+        </ul>
+    </nav>
+</header>
+
+    <div class="filtros">
+    <a href="/proyectos" class="btn-filtro">Todos</a>
+    <a href="/proyectos?grado=1103" class="btn-filtro">Grado 1103</a>
+    <a href="/proyectos?grado=1104" class="btn-filtro">Grado 1104</a>
+</div>
+
+
+    <div class="contenedor-tarjetas">
+    {% for proyecto, integrantes, porcentaje, estado in lista_proyectos %}
+
+    <div class="tarjeta">
+    <div class="banner-tarjeta">
+    <span class="icono-tarjeta">{{ proyecto[9] }}</span>
+    </div>
+    <span class="estado">{{ estado }}</span>
+    <a href="/proyecto/{{ proyecto[0] }}"><h3>{{ proyecto[1] }}</h3></a>
+    
+
+    <div class="lista-integrantes">
+        {% for i in integrantes %}
+            <div class="integrante-mini">
+                <span class="avatar-mini">{{ i[1] }}</span>
+                <span>{{ i[0] }}</span>
+            </div>
+        {% endfor %}
+    </div>
+    
+     <div class="barra-progreso-contenedor">
+        <div class="barra-progreso-relleno" style="width: {{ porcentaje }}%;"></div>
+    </div>
+    <p class="integrantes">progreso: {{ porcentaje | round(1) }}%</p>
+</div>
+    
+    {% endfor %}
+
+    <div class="registro-cta">
+        <p>¿No encuentras tu proyecto en la lista?</p>
+        <a href="/registro" class="btn-principal">Registrar mi proyecto</a>
+    </div>
+
+    </div>
+        
+    
+    
+</body>
+</html>

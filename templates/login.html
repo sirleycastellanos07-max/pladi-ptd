@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Iniciar sesión - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>PLADI-PTD</h1>
+            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <li><a href="/proyectos">Proyectos</a></li>
+                                {% if session.usuario %}
+                    <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
+                    <li><a href="/logout">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="/login">Iniciar sesión</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="login-contenedor">
+        <div class="tarjeta-seccion">
+            <h3>Iniciar sesión</h3>
+
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" action="/login">
+                <label for="usuario">Usuario</label>
+                <input type="text" id="usuario" name="usuario" required>
+
+                <label for="contrasena">Contraseña</label>
+                <input type="password" id="contrasena" name="contrasena" required>
+
+                <button type="submit" class="btn-principal">Ingresar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
