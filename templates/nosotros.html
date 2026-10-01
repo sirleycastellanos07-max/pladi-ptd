@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PLADI-PTD | Nosotros</title>
+
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stiles.css') }}">
+</head>
+
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+
+    <div class="encabezado-contenido">
+
+      <a href="index" class="marca">
+
+        
+        <img src="{{ url_for('static', filename='imagenes/escude.jpeg') }}" alt="Logo de PLADI-PTD" class="marca-logo">
+        
+
+        <div>
+          <h2 class="marca-nombre">PLADI-PTD</h2>
+
+          <p class="marca-frase">
+            Plataforma Informativa de Proyectos de Programación
+            y Tecnologías Digitales
+          </p>
+        </div>
+
+      </a>
+
+      <nav class="menu">
+
+        <a href="index">Inicio</a>
+        <a href="proyectos">Proyectos</a>
+        <a href="calendario">Calendario</a>
+        <a href="nosotros" class="activo">Nosotros</a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="contenedor nosotros">
+
+    <!-- PRESENTACIÓN -->
+    <section class="nosotros-presentacion">
+
+      <h1>Nosotros</h1>
+
+      <p class="subtitulo">
+        Conoce el propósito de PLADI-PTD y las personas que
+        hicieron posible esta plataforma.
+      </p>
+
+      <p>
+        <strong>PLADI-PTD</strong> es una plataforma digital
+        informativa creada desde la modalidad de Programación
+        y Tecnologías Digitales de la Institución Educativa
+        Liceo Tame.
+      </p>
+
+      <p>
+        Esta plataforma fue creada con el propósito de reunir
+        en un solo lugar la información de los proyectos de
+        grado, sus integrantes, avances y fechas importantes,
+        facilitando el acceso a la información para estudiantes,
+        docentes, directivos y padres de familia.
+      </p>
+
+    </section>
+
+
+    <!-- OBJETIVOS -->
+    <section class="bloque">
+
+      <h2>Objetivos de PLADI-PTD</h2>
+
+      <div class="objetivos-grid">
+
+        <article class="objetivo-card">
+
+          <div class="objetivo-numero">01</div>
+
+          <h3>Centralizar la información</h3>
+
+          <p>
+            Reunir en un solo espacio digital la información
+            de los proyectos de grado de la modalidad PTD,
+            facilitando su consulta.
+          </p>
+
+        </article>
+
+
+        <article class="objetivo-card">
+
+          <div class="objetivo-numero">02</div>
+
+          <h3>Dar visibilidad a los proyectos</h3>
+
+          <p>
+            Mostrar el trabajo y los avances de los proyectos
+            desarrollados por los estudiantes de la modalidad.
+          </p>
+
+        </article>
+
+
+        <article class="objetivo-card">
+
+          <div class="objetivo-numero">03</div>
+
+          <h3>Organizar las fechas importantes</h3>
+
+          <p>
+            Presentar de manera clara las fechas relacionadas
+            con las entregas, avances y sustentaciones.
+          </p>
+
+        </article>
+
+
+        <article class="objetivo-card">
+
+          <div class="objetivo-numero">04</div>
+
+          <h3>Facilitar el acceso</h3>
+
+          <p>
+            Ofrecer una plataforma informativa accesible para
+            los diferentes integrantes de la comunidad educativa.
+          </p>
+
+        </article>
+
+      </div>
+
+    </section>
+
+
+    <!-- CREADORAS -->
+    <section class="bloque">
+
+      <h2>Las creadoras de PLADI-PTD</h2>
+
+      <p class="texto-seccion">
+        Este proyecto fue desarrollado por estudiantes de la
+        modalidad de Programación y Tecnologías Digitales,
+        quienes participaron en diferentes áreas de creación
+        y desarrollo de la plataforma.
+      </p>
+
+
+      <div class="creadoras-grid">
+
+
+        <!-- CHARID VERA -->
+        <article class="creadora-card">
+
+          <div class="foto-persona">
+
+            <img
+              src="images/charid.jpg"
+              alt="Fotografía de Charid Vera"
+            >
+
+          </div>
+
+          <div class="creadora-info">
+
+            <h3>Charid Vera</h3>
+
+            <p class="grado">Grado 1103</p>
+
+            <p>
+              Encargada de la programación, las bases de datos
+              y la organización de la información del sistema.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <!-- SOFÍA BELLO -->
+        <article class="creadora-card">
+
+          <div class="foto-persona">
+
+            <img
+              src="images/sofia.jpg"
+              alt="Fotografía de Sofía Bello"
+            >
+
+          </div>
+
+          <div class="creadora-info">
+
+            <h3>Sofía Bello</h3>
+
+            <p class="grado">Grado 1103</p>
+
+            <p>
+              Encargada del calendario, la organización del
+              contenido y la información presentada en la
+              plataforma.
+            </p>
+
+          </div>
+
+        </article>
+
+
+        <!-- CAMILA HERNÁNDEZ -->
+        <article class="creadora-card">
+
+          <div class="foto-persona">
+
+            <img
+              src="images/camila.jpg"
+              alt="Fotografía de Camila Hernández"
+            >
+
+          </div>
+
+          <div class="creadora-info">
+
+            <h3>Camila Hernández</h3>
+
+            <p class="grado">Grado 1103</p>
+
+            <p>
+              Encargada del diseño de la interfaz, la
+              presentación visual y la construcción de la
+              sección de inicio.
+            </p>
+
+          </div>
+
+        </article>
+
+
+      </div>
+
+    </section>
+
+
+    <!-- DOCENTES -->
+    <section class="bloque">
+
+      <h2>Docentes y acompañamiento</h2>
+
+      <p class="texto-seccion">
+        El desarrollo del proyecto cuenta con el acompañamiento
+        de docentes de la Institución Educativa
+        Liceo Tame.
+      </p>
+
+
+      <div class="docentes-grid">
+
+
+        <!-- DOCENTE 1 -->
+        <article class="docente-card">
+        <div class="foto-docente">
+        <img src="{{ url_for('static', filename='imagenes/prfe_angelica.jpeg') }}" alt="Fotografía del docente">
+         
+
+        </div>
+        <div>
+            <h3>Angelica Mendoza</h3>
+            <p>Asesor del proyecto</p>
+        </div>
+    </article>
+
+
+        <!-- DOCENTE 2 -->
+        <article class="docente-card">
+            <div class="foto-docente">
+         <img src="{{ url_for('static', filename='imagenes/profe_diego.jpeg') }}" alt="Fotografía del docente">
+        
+          </div>
+
+          <div>
+            <h3>Diego Castillo</h3>
+            <p>Docente de la modalidad</p>
+          </div>
+        </article>
+
+
+        <!-- DOCENTE 3 -->
+        <article class="docente-card">
+          <div class="foto-docente">
+        <img src="{{ url_for('static', filename='imagenes/profe_israel.jpeg') }}" alt="Fotografía del docente">
+    
+          </div>
+          <div>
+            <h3>Israel Acevedo</h3>
+            <p>Instructor de SENA</p>
+
+          </div>
+
+        </article>
+
+
+        <!-- DOCENTE 4 -->
+        <article class="docente-card">
+          <div class="foto-docente">
+         <img src="{{ url_for('static', filename='imagenes/profe_daiel.jpeg') }}" alt="Fotografía del docente">
+          
+          </div>
+          <div>
+            <h3>Daniel Garcias</h3>
+            <p>Acompañamiento académico</p>
+          </div>
+        </article>
+
+
+      </div>
+
+    </section>
+
+    <!-- INFORMACIÓN DE LA PLATAFORMA -->
+    <section class="bloque">
+
+      <h2>¿Qué puedes encontrar en PLADI-PTD?</h2>
+
+      <div class="info-plataforma">
+
+        <div>
+          <h3>Proyectos</h3>
+          <p>
+            Información organizada sobre los proyectos de grado
+            desarrollados por los estudiantes.
+          </p>
+        </div>
+
+
+        <div>
+          <h3>Calendario</h3>
+          <p>
+            Fechas importantes relacionadas con las etapas,
+            entregas y sustentaciones de los proyectos.
+          </p>
+
+        </div>
+        <div>
+
+          <h3>Información</h3>
+          <p>
+            Contenido que permite conocer el trabajo realizado
+            por la modalidad de Programación y Tecnologías
+            Digitales.
+          </p>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- CIERRE -->
+    <section class="bloque">
+
+      <h2>Sobre PLADI-PTD</h2>
+
+      <p class="cita">
+
+        PLADI-PTD representa una iniciativa desarrollada desde
+        la modalidad de Programación y Tecnologías Digitales
+        para organizar, compartir y dar visibilidad al trabajo
+        realizado por los estudiantes del Liceo Tame.
+      </p>
+    </section>
+  </main>
+
+
+  <!-- PIE DE PÁGINA -->
+  <footer class="pie">
+    <p>
+      PLADI-PTD · Institución Educativa Liceo Tame · 2026
+    </p>
+
+  </footer>
+
+
+</body>
+</html>

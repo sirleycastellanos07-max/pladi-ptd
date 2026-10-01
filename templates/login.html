@@ -4,26 +4,22 @@
     <meta charset="UTF-8">
     <title>Iniciar sesión - PLADI-PTD</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>PLADI-PTD</h1>
-            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/proyectos">Proyectos</a></li>
-                                {% if session.usuario %}
-                    <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
-                    <li><a href="/logout">Cerrar sesión</a></li>
-                {% else %}
-                    <li><a href="/login">Iniciar sesión</a></li>
-                {% endif %}
-            </ul>
-        </nav>
-    </header>
+   <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/index">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+        </ul>
+    </nav>
+</header>
 
     <div class="login-contenedor">
         <div class="tarjeta-seccion">
@@ -42,6 +38,7 @@
 
                 <button type="submit" class="btn-principal">Ingresar</button>
             </form>
+            <p class="enlace-secundario">¿No tienes cuenta? <a href="/registro">Registra tu proyecto aquí</a></p>
         </div>
     </div>
 </body>

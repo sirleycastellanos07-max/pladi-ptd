@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Crear cuenta - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+</head>
+<body>
+    <!-- ENCABEZADO -->
+  <header class="encabezado">
+    <div class="encabezado-contenido">
+
+      <a href="incio" class="marca">
+        <!-- LOGO: si cambian la imagen, solo cambien el nombre del archivo en src -->
+        <img src="escude.jpeg" alt="Logo de PLADI-PTD" class="marca-logo">
+        <div>
+          <h2 class="marca-nombre">PLADI-PTD</h2>
+          <p class="marca-frase">Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+      </a>
+        <nav>
+            <ul>
+                <li><a href="/index">Inicio</a></li>
+                <li><a href="/proyectos">Proyectos</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="login-contenedor">
+        <div class="tarjeta-seccion">
+            <h3>Crear cuenta para mi proyecto</h3>
+            <p class="enlace-secundario">Si tu proyecto ya está registrado en la plataforma, crea aquí tu usuario y contraseña para poder editarlo.</p>
+
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
+            {% if proyectos|length == 0 %}
+                <p class="mensaje-error">Todos los proyectos ya tienen una cuenta creada.</p>
+            {% else %}
+                <form method="POST" action="/crear-cuenta">
+                    <label for="id_proyecto">Selecciona tu proyecto</label>
+                    <select id="id_proyecto" name="id_proyecto" required>
+                        <option value="">-- Elige tu proyecto --</option>
+                        {% for p in proyectos %}
+                            <option value="{{ p[0] }}">{{ p[1] }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="usuario">Nombre de usuario</label>
+                    <input type="text" id="usuario" name="usuario" required>
+
+                    <label for="contrasena">Contraseña</label>
+                    <input type="password" id="contrasena" name="contrasena" required>
+
+                    <button type="submit" class="btn-principal">Crear mi cuenta</button>
+                </form>
+            {% endif %}
+
+            <p class="enlace-secundario">¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a></p>
+        </div>
+    </div>
+</body>
+</html>

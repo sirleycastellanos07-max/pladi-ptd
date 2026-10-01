@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <title>Registrar proyecto - PLADI-PTD</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>PLADI-PTD</h1>
-            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/proyectos">Proyectos</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/index">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+           
+        </ul>
+    </nav>
+</header>
 
     <div class="login-contenedor">
         <div class="tarjeta-seccion">
@@ -45,6 +48,7 @@
 
                 <button type="submit" class="btn-principal">Crear mi proyecto</button>
             </form>
+             <p class="enlace-secundario">¿Ya tienes una cuenta? <a href="/login">Inicia sesión aquí</a></p>
         </div>
     </div>
 </body>

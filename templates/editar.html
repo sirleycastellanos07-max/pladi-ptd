@@ -4,20 +4,22 @@
     <meta charset="UTF-8">
     <title>Editar proyecto - PLADI-PTD</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <h1>PLADI-PTD</h1>
-            <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="/">Inicio</a></li>
-                <li><a href="/proyectos">Proyectos</a></li>
-            </ul>
-        </nav>
-    </header>
+    <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/index">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+        </ul>
+    </nav>
+</header>
 
     <div class="login-contenedor">
         <div class="tarjeta-seccion">
@@ -45,6 +47,29 @@
                 {% endfor %}
                 <input type="text" name="objetivos[]" placeholder="Agregar otro objetivo...">
                 <input type="text" name="objetivos[]" placeholder="Agregar otro objetivo...">
+
+                <label for="galeria_nuevas">Agregar fotos nuevas</label>
+                <input type="file" id="galeria_nuevas" name="galeria_nuevas" accept="image/*" multiple>
+
+                <label for="cronograma">Imagen del cronograma</label>
+                {% if proyecto[8] %}
+                    <p class="enlace-secundario">Archivo actual: {{ proyecto[8] }}</p>
+                {% endif %}
+                <input type="file" id="cronograma" name="cronograma" accept="image/*">
+
+                <label>Documentos</label>
+                {% for d in documentos %}
+                    <div class="fila-editar-documento">
+                        <input type="hidden" name="documento_id[]" value="{{ d[0] }}">
+                        <span class="nombre-documento-editar">{{ d[1] }}</span>
+                        <select name="documento_estado[]">
+                            <option value="Aprobado" {% if d[2] == 'Aprobado' %}selected{% endif %}>Aprobado</option>
+                            <option value="En revisión" {% if d[2] == 'En revisión' %}selected{% endif %}>En revisión</option>
+                            <option value="No entregado" {% if d[2] == 'No entregado' %}selected{% endif %}>No entregado</option>
+                        </select>
+                        <input type="file" name="documento_archivo[]">
+                    </div>
+                {% endfor %}
 
                 <button type="submit" class="btn-principal">Guardar cambios</button>
             </form>

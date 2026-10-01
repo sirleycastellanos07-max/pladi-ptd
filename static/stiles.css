@@ -1,0 +1,816 @@
+/* =====================================================
+   PLADI-PTD - Estilos
+   Sencillo, informativo, verde con un toque muy sutil de amarillo.
+   ===================================================== */
+
+:root {
+  --verde-principal: #0c6f2f;
+  --verde-claro: #BDE0C9;
+  --amarillo: #F2CF55;
+  --fondo: #FFFFFF;
+  --fondo-secundario: #F7F9F5;
+  --texto: #1F2020;
+  --texto-secundario: #4A4F45;
+  --borde: #E3E6DE;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--fondo-secundario);
+  color: var(--texto);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--verde-principal);
+}
+
+
+/* =====================================================
+   ENCABEZADO
+   ===================================================== */
+
+.encabezado {
+  background-color: var(--verde-principal);
+  border-bottom: 3px solid var(--amarillo);
+  padding: 14px 30px;
+}
+
+.encabezado-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.marca-logo {
+  height: 55px;
+  width: auto;
+  mix-blend-mode: multiply;
+}
+
+.marca-nombre {
+  font-size: 22px;
+  color: var(--fondo);
+  line-height: 1.1;
+}
+
+.marca-frase {
+  font-size: 12px;
+  color: var(--fondo);
+  opacity: 0.9;
+}
+
+.menu {
+  display: flex;
+  gap: 22px;
+}
+
+.menu a + a {
+  margin-left: 22px;
+}
+
+@supports (gap: 1px) {
+  .menu a + a {
+    margin-left: 0;
+  }
+}
+
+.menu a {
+  font-size: 15px;
+  color: var(--fondo);
+  text-decoration: none;
+  padding-bottom: 3px;
+}
+
+.menu a:hover {
+  text-decoration: underline;
+}
+
+.menu a.activo {
+  font-weight: bold;
+  border-bottom: 2px solid var(--fondo);
+}
+
+
+/* =====================================================
+   CONTENIDO GENERAL
+   ===================================================== */
+
+.contenedor {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--fondo);
+  padding: 35px 30px;
+}
+
+h1 {
+  font-size: 26px;
+  color: var(--verde-principal);
+  border-bottom: 2px solid var(--amarillo);
+  padding-bottom: 8px;
+  margin-bottom: 18px;
+}
+
+h2 {
+  font-size: 19px;
+  color: var(--verde-principal);
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 14px;
+}
+
+.subtitulo {
+  color: var(--texto-secundario);
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--borde);
+  margin: 30px 0;
+}
+
+
+/* =====================================================
+   INICIO
+   ===================================================== */
+
+.presentacion {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.presentacion-texto {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* Recuadro donde se puede agregar una imagen. Mientras no haya imagen,
+   se ve este recuadro punteado. */
+.marcador-imagen {
+  width: 260px;
+  border: 2px dashed var(--borde);
+  border-radius: 4px;
+  padding: 40px 15px;
+  text-align: center;
+  color: var(--texto-secundario);
+  font-size: 13px;
+}
+
+.presentacion-texto {
+  max-width: 700px;
+}
+
+/* GALERÍA: las 3 imágenes en fila. En pantallas angostas se acomodan solas
+   en varias filas gracias a flex-wrap. */
+.galeria-imagenes {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+/* Recuadro de cada imagen. Mientras no haya foto, se ve este recuadro punteado. */
+.marcador-imagen {
+  flex: 1;
+  min-width: 160px;
+  border: 2px dashed var(--borde);
+  border-radius: 4px;
+  padding: 40px 15px;
+  text-align: center;
+  color: var(--texto-secundario);
+  font-size: 13px;
+}
+
+.marcador-imagen img {
+  width: 100%;
+  border-radius: 4px;
+  display: block;
+}
+
+.botones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.boton {
+  display: inline-block;
+  padding: 9px 20px;
+  font-size: 14px;
+  text-decoration: none;
+  border: 1px solid var(--verde-principal);
+}
+
+.boton-lleno {
+  background-color: var(--verde-principal);
+  color: var(--fondo);
+}
+
+.boton-lleno:hover {
+  background-color: #1E7A3D;
+}
+
+.boton-borde {
+  color: var(--verde-principal);
+  background-color: var(--fondo);
+}
+
+.boton-borde:hover {
+  background-color: var(--fondo-secundario);
+}
+
+/* Lista de secciones (como un índice), con un toque sutil de amarillo */
+.lista-secciones {
+  list-style: none;
+}
+
+.lista-secciones li {
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background-color: var(--fondo-secundario);
+  border-left: 3px solid var(--amarillo);
+}
+
+.lista-secciones a {
+  font-size: 17px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.lista-secciones a:hover {
+  text-decoration: underline;
+}
+
+.lista-secciones p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+
+/* =====================================================
+   NOSOTROS
+   ===================================================== */
+
+.bloque {
+  margin-bottom: 40px;
+}
+
+
+/* Texto general de las secciones */
+
+.texto-seccion {
+  color: var(--texto-secundario);
+  font-size: 14px;
+}
+
+
+/* =====================================================
+   OBJETIVOS
+   ===================================================== */
+
+.objetivos-grid {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.objetivo-card {
+  flex: 1;
+  min-width: 200px;
+  padding: 20px 18px;
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+  border-top: 3px solid var(--amarillo);
+}
+
+.objetivo-numero {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--verde-principal);
+  margin-bottom: 8px;
+}
+
+.objetivo-card h3 {
+  color: var(--verde-principal);
+  font-size: 17px;
+  margin-bottom: 8px;
+}
+
+.objetivo-card p {
+  color: var(--texto-secundario);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+
+/* =====================================================
+   CREADORAS
+   ===================================================== */
+
+.creadoras-grid {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.creadora-card {
+  flex: 1;
+  min-width: 210px;
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+}
+
+.foto-persona {
+  width: 100%;
+  height: 220px;
+  background-color: #eef2ec;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.foto-persona img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+.creadora-info {
+  padding: 16px;
+}
+
+.creadora-info h3 {
+  color: var(--verde-principal);
+  font-size: 18px;
+  margin-bottom: 3px;
+}
+
+.creadora-info .grado {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  margin-bottom: 8px;
+}
+
+.creadora-info p {
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+
+/* =====================================================
+   DOCENTES
+   ===================================================== */
+
+/* 4 tarjetas por fila, todas del mismo tamaño.
+   En tablet pasan a 2 por fila y en celular a 1. */
+.docentes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+}
+
+.docente-card {
+  min-width: 0;
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+  padding-bottom: 15px;
+}
+
+/* Foto en cuadro: aspect-ratio 1 / 1 la hace cuadrada.
+   object-position: center top mantiene visible la cara. */
+.foto-docente {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #eef2ec;
+  overflow: hidden;
+}
+
+.foto-docente img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+@media (max-width: 700px) {
+  .docentes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 420px) {
+  .docentes-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.docente-card > div:last-child {
+  padding: 12px 15px 0;
+}
+
+.docente-card h3 {
+  color: var(--verde-principal);
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.docente-card p {
+  color: var(--texto-secundario);
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
+
+/* =====================================================
+   INFORMACIÓN DE LA PLATAFORMA
+   ===================================================== */
+
+.info-plataforma {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.info-plataforma > div {
+  flex: 1;
+  min-width: 200px;
+  padding: 18px;
+  background-color: var(--fondo-secundario);
+  border-left: 3px solid var(--amarillo);
+}
+
+.info-plataforma h3 {
+  color: var(--verde-principal);
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.info-plataforma p {
+  color: var(--texto-secundario);
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+
+/* =====================================================
+   CITA FINAL
+   ===================================================== */
+
+.cita {
+  border-left: 3px solid var(--amarillo);
+  background-color: var(--fondo-secundario);
+  padding: 16px 18px;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+
+/* =====================================================
+   NUEVO: INICIO (cifras, sobre la modalidad, tarjetas)
+   ===================================================== */
+
+/* Cifras */
+.cifras {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.cifra {
+  flex: 1;
+  min-width: 170px;
+  padding: 18px 12px;
+  text-align: center;
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+  border-top: 3px solid var(--amarillo);
+}
+
+.cifra-numero {
+  display: block;
+  font-size: 34px;
+  font-weight: bold;
+  color: var(--verde-principal);
+  line-height: 1.2;
+}
+
+.cifra-texto {
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+/* Sobre la modalidad */
+.dos-columnas {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.dos-columnas > div {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* Tarjetas clicables */
+.tarjetas {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.tarjeta {
+  flex: 1;
+  min-width: 220px;
+  display: block;
+  padding: 20px 18px;
+  text-decoration: none;
+  color: var(--texto);
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--amarillo);
+}
+
+.tarjeta:hover {
+  border-color: var(--verde-principal);
+  background-color: var(--fondo);
+}
+
+.tarjeta h2 {
+  margin-bottom: 8px;
+}
+
+.tarjeta p {
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+.tarjeta-enlace {
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--verde-principal);
+}
+
+.tarjeta:hover .tarjeta-enlace {
+  text-decoration: underline;
+}
+
+
+/* =====================================================
+   NUEVO: PROYECTOS Y CALENDARIO
+   ===================================================== */
+
+.proyecto {
+  padding: 16px 18px;
+  margin-bottom: 15px;
+  background-color: var(--fondo-secundario);
+  border: 1px solid var(--borde);
+  border-left: 3px solid var(--amarillo);
+}
+
+.proyecto h2 {
+  margin-bottom: 4px;
+}
+
+.proyecto-grupo {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  margin-bottom: 8px;
+}
+
+.proxima {
+  font-style: normal;
+  font-size: 15px;
+}
+
+
+/* =====================================================
+   NUEVO: PORTADA (hero), proyectos destacados y pie ampliado
+   Inspirado en la estructura de la página del Liceo Tame
+   ===================================================== */
+
+/* Portada con foto de fondo (solo aquí va la imagen).
+   - El 0.45 es qué tan oscura se ve la capa sobre la foto
+     (0.3 = se ve más la foto, 0.6 = más oscura).
+   - El padding de 100px controla qué tan alta es la barra. */
+.hero {
+  background-image: linear-gradient(rgba(10, 50, 25, 0.45), rgba(10, 50, 25, 0.45)), url("imagenes/litame.jpeg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--fondo);
+  text-align: center;
+  padding: 100px 30px;
+  border-bottom: 3px solid var(--amarillo);
+}
+
+.hero-contenido {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero-lugar {
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+.hero h1 {
+  color: var(--fondo);
+  border-bottom: none;
+  font-size: 40px;
+  margin-bottom: 6px;
+  padding-bottom: 0;
+}
+
+.hero-texto {
+  font-size: 16px;
+  margin-bottom: 22px;
+}
+
+.hero .botones {
+  justify-content: center;
+}
+
+.boton-amarillo {
+  background-color: var(--amarillo);
+  border-color: var(--amarillo);
+  color: var(--texto);
+}
+
+.boton-amarillo:hover {
+  background-color: #E3B93A;
+}
+
+.boton-blanco {
+  color: var(--fondo);
+  border-color: var(--fondo);
+}
+
+.boton-blanco:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Presentación con logo al lado */
+.intro {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.intro-logo {
+  width: 130px;
+  height: auto;
+}
+
+.intro-texto {
+  flex: 1;
+  min-width: 260px;
+}
+
+/* Proyectos destacados */
+.grid-proyectos {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.card-proyecto {
+  flex: 1;
+  min-width: 220px;
+  background-color: var(--fondo);
+  border: 1px solid var(--borde);
+}
+
+.card-proyecto img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-proyecto-texto {
+  padding: 14px 16px 6px;
+}
+
+.card-proyecto h2 {
+  font-size: 17px;
+  margin-bottom: 6px;
+}
+
+.card-proyecto p {
+  font-size: 14px;
+  color: var(--texto-secundario);
+}
+
+.card-proyecto a.ver {
+  display: block;
+  padding: 0 16px 14px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* =====================================================
+   PIE DE PÁGINA EN COLUMNAS
+   ===================================================== */
+
+.pie {
+  background-color: var(--verde-principal);
+  border-top: 3px solid var(--amarillo);
+  color: var(--fondo);
+  text-align: left;
+  padding: 40px 30px 20px;
+  font-size: 14px;
+}
+
+.pie-contenido {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.pie-grid {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.pie-col {
+  flex: 1;
+  min-width: 170px;
+}
+
+/* Títulos de cada columna */
+.pie-col h3 {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--fondo);
+  margin-bottom: 12px;
+}
+
+/* Enlaces y textos */
+.pie-col a,
+.pie-col p {
+  display: block;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  margin-bottom: 8px;
+}
+
+.pie-col a:hover {
+  color: var(--fondo);
+  text-decoration: underline;
+}
+
+/* Línea de abajo */
+.pie-derechos {
+  margin: 30px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 700px) {
+  .pie {
+    padding: 30px 18px 16px;
+  }
+
+  .pie-col {
+    min-width: 140px;
+  }
+}

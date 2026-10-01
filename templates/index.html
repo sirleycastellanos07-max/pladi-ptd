@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLADI-PTD | Inicio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='stiles.css') }}">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+
+</head>
+<body>
+
+  <!-- ENCABEZADO -->
+  <header class="encabezado">
+    <div class="encabezado-contenido">
+
+      <a href="index" class="marca">
+        <!-- LOGO: si cambian la imagen, solo cambien el nombre del archivo en src -->
+        <img src="{{ url_for('static', filename='imagenes/escude.jpeg') }}" alt="Logo de PLADI-PTD" class="marca-logo">
+        <div>
+          <h2 class="marca-nombre">PLADI-PTD</h2>
+          <p class="marca-frase">Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+      </a>
+
+      <nav class="menu">
+        <a href="index" class="activo">Inicio</a>
+        <a href="proyectos">Proyectos</a>
+        <a href="calendario">Calendario</a>
+        <a href="nosotros">Nosotros</a>
+      </nav>
+
+    </div>
+  </header>
+
+  <!-- PORTADA -->
+  <section class="hero">
+    <div class="hero-contenido">
+      <p class="hero-lugar">TAME · ARAUCA</p>
+      <h1>PLADI-PTD</h1>
+      <p class="hero-texto">
+        Proyectos de la modalidad de Programación y Tecnologías Digitales
+        de la Institución Educativa Liceo Tame
+      </p>
+      <div class="botones">
+        <a href="proyectos" class="boton boton-amarillo">VER PROYECTOS</a>
+        <a href="nosotros" class="boton boton-blanco">QUIERES SABER MAS DE NOSTROS</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="contenedor">
+
+    <!-- Accesos rápidos: cada cuadro es un enlace -->
+    <section class="secciones">
+      <div class="tarjetas">
+        <a href="proyectos" class="tarjeta">
+          <h2>Proyectos</h2>
+          <p>Consulta los proyectos de la modalidad, sus objetivos y sus integrantes.</p>
+          <span class="tarjeta-enlace">Ver proyectos &rarr;</span>
+        </a>
+
+        <a href="calendario" class="tarjeta">
+          <h2>Calendario</h2>
+          <p>Revisa las fechas importantes del semestre: entregas, revisiones y socializaciones.</p>
+          <span class="tarjeta-enlace">Ver calendario &rarr;</span>
+        </a>
+
+        <a href="nosotros" class="tarjeta">
+          <h2>Nosotros</h2>
+          <p>Conoce a los directivos de la modalidad y al equipo que creó la plataforma.</p>
+          <span class="tarjeta-enlace">Conocer al equipo &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Presentación de la plataforma -->
+    <section class="presentacion">
+      <div class="presentacion-texto">
+        <h1>Bienvenidos a PLADI-PTD</h1>
+        <p>
+          Una plataforma informativa donde podrás explorar todos los proyectos académicos
+          desarrollados por los estudiantes de la modalidad de Programación y Tecnologías
+          Digitales del Liceo Tame.
+        </p>
+        <p>
+          Aquí encontrarán información sobre los proyectos de cada grupo, las fechas
+          importantes del semestre y el equipo que hace parte de esta modalidad.
+        </p>
+
+        <div class="galeria-imagenes">
+          <div class="marcador-imagen">
+            <img src="{{ url_for('static', filename='imagenes/Grupo21-1.png') }}" alt="Fotografía del docente">
+          </div>
+          <div class="marcador-imagen">
+            <img src="{{ url_for('static', filename='imagenes/Grupo24-2.png') }}" alt="Fotografía del docente">
+          </div>
+          <div class="marcador-imagen">
+            <img src="{{ url_for('static', filename='imagenes/Grupo9-1.png') }}" alt="Fotografía del docente">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Cifras (cambiar los números por los reales) -->
+    <section class="datos">
+      <h1>La plataforma en cifras</h1>
+      <div class="cifras">
+        <div class="cifra">
+          <span class="cifra-numero">18</span>
+          <span class="cifra-texto">Proyectos</span>
+        </div>
+        <div class="cifra">
+          <span class="cifra-numero">18</span>
+          <span class="cifra-texto">Grupos de trabajo</span>
+        </div>
+        <div class="cifra">
+          <span class="cifra-numero">60+</span>
+          <span class="cifra-texto">Estudiantes</span>
+        </div>
+    </section>
+
+    <hr>
+
+    <!-- Proyectos destacados (copiar un bloque por proyecto) -->
+    <section class="destacados">
+      <h1>Proyectos destacados</h1>
+      <p class="subtitulo">Algunos de los proyectos que puedes conocer en la plataforma.</p>
+
+      <div class="grid-proyectos">
+        <div class="card-proyecto">
+          <img src="images/foto1.jpg" alt="Imagen del proyecto 1">
+          <div class="card-proyecto-texto">
+            <h2>Nombre del proyecto 1</h2>
+            <p>Descripción corta del proyecto en una o dos líneas.</p>
+          </div>
+          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
+        </div>
+
+        <div class="card-proyecto">
+          <img src="images/foto1.jpg" alt="Imagen del proyecto 2">
+          <div class="card-proyecto-texto">
+            <h2>Nombre del proyecto 2</h2>
+            <p>Descripción corta del proyecto en una o dos líneas.</p>
+          </div>
+          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
+        </div>
+
+        <div class="card-proyecto">
+          <img src="images/foto1.jpg" alt="Imagen del proyecto 3">
+          <div class="card-proyecto-texto">
+            <h2>Nombre del proyecto 3</h2>
+            <p>Descripción corta del proyecto en una o dos líneas.</p>
+          </div>
+          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <hr>
+
+    <!-- Sobre la modalidad (completar con el anteproyecto) -->
+    <section class="sobre-modalidad">
+      <h1>Sobre la modalidad</h1>
+
+      <div class="dos-columnas">
+        <div>
+          <h2>¿Qué es PTD?</h2>
+          <p>
+            Escribir aquí una descripción corta de la modalidad de Programación y
+            Tecnologías Digitales: qué aprenden los estudiantes y qué tipo de
+            proyectos desarrollan.
+          </p>
+        </div>
+        <div>
+          <h2>¿Para qué sirve esta plataforma?</h2>
+          <p>
+            Escribir aquí el objetivo de PLADI-PTD: reunir en un solo lugar los
+            proyectos, las fechas y la información de la modalidad para que toda la
+            comunidad educativa pueda consultarla.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="pie">
+    <div class="pie-columnas">
+      <div>
+        <h3>PLADI-PTD</h3>
+        <p>Plataforma informativa de la modalidad de Programación y Tecnologías Digitales.</p>
+      </div>
+      <div> 
+        <h3>Secciones</h3>
+        <a href="index">Inicio</a>
+        <a href="proyectos">Proyectos</a>
+        <a href="calendario">Calendario</a>
+        <a href="nosotros">Nosotros</a>
+      </div>
+      <div>
+        <h3>Institución</h3>
+        <p>Institución Educativa Liceo Tame</p>
+        <p>Tame, Arauca</p>
+        <a href="https://ieliceotame.edu.co/">Sitio oficial del Liceo Tame</a>
+      </div>
+    </div>
+   <!-- PIE DE PÁGINA (reemplaza el <footer class="pie"> que ya tienes) -->
+  <footer class="pie">
+    <div class="pie-contenido">
+
+      <div class="pie-grid">
+
+        <div class="pie-col">
+          <h3>Explora PLADI-PTD</h3>
+          <a href="index">Inicio</a>
+          <a href="proyectos">Proyectos</a>
+          <a href="calendario">Calendario</a>
+          <a href="nosotros">Nosotros</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>La plataforma</h3>
+          <a href="nosotros">Objetivo de la plataforma</a>
+          <a href="nosotros">Las creadoras</a>
+          <a href="nosotros">Directivos</a>
+          <a href="index">¿Cómo usar la plataforma?</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>La modalidad PTD</h3>
+          <a href="proyectos">Proyectos de los grupos</a>
+          <a href="proyectos">Avance de los proyectos</a>
+          <a href="calendario">Fechas importantes</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>Liceo Tame</h3>
+          <p>Institución Educativa Liceo Tame</p>
+          <p>Tame, Arauca</p>
+          <a href="https://ieliceotame.edu.co/">Sitio oficial del Liceo</a>
+        </div>
+
+      </div>
+
+      <p class="pie-derechos">PLADI-PTD · Institución Educativa Liceo Tame · 2026</p>
+
+    </div>
+  </footer>
+
+  
+</body>
+</html>
