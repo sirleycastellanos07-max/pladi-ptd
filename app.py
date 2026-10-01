@@ -17,8 +17,12 @@ def index():
     cursor = conexion.cursor()
     cursor.execute("SELECT id, titulo, grado, grupo FROM proyectos LIMIT 3")
     destacados = cursor.fetchall()
+    cursor.close()
     conexion.close()
     return render_template('index.html', destacados=destacados)
+
+
+    
 
 @app.route('/calendario')
 def calendario():

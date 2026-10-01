@@ -95,10 +95,10 @@
             <img src="{{ url_for('static', filename='imagenes/Grupo21-1.png') }}" alt="Fotografía del docente">
           </div>
           <div class="marcador-imagen">
-            <img src="{{ url_for('static', filename='imagenes/Grupo24-2.png') }}" alt="Fotografía del docente">
+            <img src="{{ url_for('static', filename='imagenes/Grupo7-2.png') }}" alt="Fotografía del docente">
           </div>
           <div class="marcador-imagen">
-            <img src="{{ url_for('static', filename='imagenes/Grupo9-1.png') }}" alt="Fotografía del docente">
+            <img src="{{ url_for('static', filename='imagenes/Grupo27-2.png') }}" alt="Fotografía del docente">
           </div>
         </div>
       </div>
@@ -131,35 +131,26 @@
       <h1>Proyectos destacados</h1>
       <p class="subtitulo">Algunos de los proyectos que puedes conocer en la plataforma.</p>
 
-      <div class="grid-proyectos">
-        <div class="card-proyecto">
-          <img src="images/foto1.jpg" alt="Imagen del proyecto 1">
-          <div class="card-proyecto-texto">
-            <h2>Nombre del proyecto 1</h2>
-            <p>Descripción corta del proyecto en una o dos líneas.</p>
-          </div>
-          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
-        </div>
+    <div class="proyectos-grid">
+        {% for proyecto in destacados %}
+        <div class="proyecto-card">
+            <div class="proyecto-imagen">
+                <!-- Espacio para la imagen -->
+            </div>
+            <div class="proyecto-contenido">
+                <h3>{{ proyecto[1] }}</h3>
 
-        <div class="card-proyecto">
-          <img src="images/foto1.jpg" alt="Imagen del proyecto 2">
-          <div class="card-proyecto-texto">
-            <h2>Nombre del proyecto 2</h2>
-            <p>Descripción corta del proyecto en una o dos líneas.</p>
-          </div>
-          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
+                <p>
+                  Grado: {{ proyecto[2] }}<br>
+                  Grupo: {{ proyecto[3] }}
+                </p>
+                <a href="#"> Ver proyecto →</a>
+            </div>
         </div>
+        {% endfor %}
+    </div>
 
-        <div class="card-proyecto">
-          <img src="images/foto1.jpg" alt="Imagen del proyecto 3">
-          <div class="card-proyecto-texto">
-            <h2>Nombre del proyecto 3</h2>
-            <p>Descripción corta del proyecto en una o dos líneas.</p>
-          </div>
-          <a href="proyectos" class="ver">Ver proyecto &rarr;</a>
-        </div>
-      </div>
-    </section>
+</section>
 
     <hr>
 

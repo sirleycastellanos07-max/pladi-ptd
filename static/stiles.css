@@ -244,6 +244,211 @@ hr {
   background-color: var(--fondo-secundario);
 }
 
+/* ================================
+   PROYECTOS DESTACADOS
+================================ */
+
+.destacados {
+    padding: 40px 0;
+}
+
+.destacados h1 {
+    color: #08752f;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    color: #555;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.proyecto-card {
+    border: 1px solid #ddd;
+    background: white;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    transition: 0.3s ease;
+}
+
+.proyecto-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.10);
+}
+
+.proyecto-imagen {
+    height: 190px;
+    background: #f5f7f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.proyecto-contenido {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.proyecto-contenido h3 {
+    color: #08752f;
+    font-size: 23px;
+    margin: 0 0 15px;
+}
+
+.proyecto-contenido p {
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.proyecto-contenido a {
+    margin-top: auto;
+    color: #08752f;
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+.proyecto-contenido a:hover {
+    color: #055c25;
+}
+
+
+/* ================================
+   DETALLE DEL PROYECTO
+================================ */
+
+.detalle-proyecto {
+    max-width: 1100px;
+    margin: 50px auto;
+    padding: 0 30px;
+}
+
+.volver {
+    color: #08752f;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.volver:hover {
+    text-decoration: underline;
+}
+
+.detalle-contenido {
+    margin-top: 30px;
+    padding: 40px;
+    background: white;
+    border: 1px solid #ddd;
+}
+
+.detalle-contenido h1 {
+    color: #08752f;
+    font-size: 36px;
+    margin-bottom: 30px;
+}
+
+.detalle-info {
+    font-size: 18px;
+    color: #555;
+}
+
+.detalle-info strong {
+    color: #333;
+}
+/* CONTENEDOR DE LAS TARJETAS */
+.proyectos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* TARJETA */
+.proyecto-card {
+    border: 1px solid #ddd;
+    background: white;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.3s ease;
+}
+
+/* EFECTO AL PASAR EL MOUSE */
+.proyecto-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.10);
+}
+
+/* ESPACIO SUPERIOR DE LA TARJETA */
+.proyecto-imagen {
+    height: 120px;
+    background: #f5f7f4;
+}
+
+/* CONTENIDO */
+.proyecto-contenido {
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TÍTULO */
+.proyecto-contenido h3 {
+    color: #08752f;
+    font-size: 20px;
+    line-height: 1.35;
+    margin: 0 0 12px;
+}
+
+/* GRADO Y GRUPO */
+.proyecto-contenido p {
+    color: #555;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* BOTÓN */
+.proyecto-contenido a {
+    margin-top: auto;
+    padding-top: 15px;
+    color: #08752f;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.proyecto-contenido a:hover {
+    text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .proyectos-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .proyectos-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Lista de secciones (como un índice), con un toque sutil de amarillo */
 .lista-secciones {
   list-style: none;

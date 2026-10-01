@@ -8,24 +8,30 @@
 </head>
 <body>
     <!-- ENCABEZADO -->
-  <header>
-    <div class="logo">
-        <h1>PLADI-PTD</h1>
-        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
-    </div>
+  <header class="encabezado">
+    <div class="encabezado-contenido">
+
+      <a href="incio" class="marca">
+        <!-- LOGO: si cambian la imagen, solo cambien el nombre del archivo en src -->
+        <img src="escude.jpeg" alt="Logo de PLADI-PTD" class="marca-logo">
+        <div>
+          <h2 class="marca-nombre">PLADI-PTD</h2>
+          <p class="marca-frase">Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+        </div>
+      </a>
     <nav>
         <ul>
             <li><a href="/index">Inicio</a></li>
             <li><a href="/proyectos">Proyectos</a></li>
             <li><a href="/calendario">Calendario</a></li>
             <li><a href="/nosotros">Nosotros</a></li>
-            {% if session.usuario %}
-                <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
-                <li><a href="/logout">Cerrar sesión</a></li>
-            {% else %}
-                <li><a href="/crear-cuenta">Crear cuenta</a></li>
-                <li><a href="/login">Iniciar sesión</a></li>
-            {% endif %}
+                {% if session.usuario %}
+                    <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
+                    <li><a href="/logout">Cerrar sesión</a></li>
+                {% else %}
+                    <li><a href="/crear-cuenta">Crear cuenta</a></li>
+                    <li><a href="/login">Iniciar sesión</a></li>
+                {% endif %}
         </ul>
     </nav>
 </header>
