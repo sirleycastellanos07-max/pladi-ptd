@@ -27,14 +27,16 @@
 /* =====================================================
    ENCABEZADO
    ===================================================== */
-  .encabezado-contenido {
-  max-width: 900px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+.encabezado-contenido {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    box-sizing: border-box;
 }
    .marca {
   display: flex;
@@ -60,17 +62,18 @@
   opacity: 0.9;
 }
 header {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: var(--green-lime);
-    padding: 18px 50px;
+    padding: 18px 30px;
     border-bottom: 3px solid var(--amarillo);
     position: sticky;
     top: 0;
     z-index: 100;
+    box-sizing: border-box;
 }
-
 .logo h1 {
     color: var(--bg);
     font-size: 28px;
@@ -214,14 +217,24 @@ body {
     margin-right: 16px;
 }
 
+
 .banner-tarjeta {
-    height: 90px;
+    height: 135px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 12px;
+    overflow: hidden;
     border-top-left-radius: var(--radius);
     border-top-right-radius: var(--radius);
+}
+
+.imagen-tarjeta {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
 .icono-tarjeta {
@@ -320,9 +333,24 @@ body {
     transform: translateY(-4px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
+
+
+
 .tarjeta-encabezado {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
     padding: 0;
+    margin: 0 0 20px 0;
     overflow: hidden;
+
+    box-shadow: var(--shadow);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -331,12 +359,23 @@ body {
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
+
+
+
+/* Banner de la imagen del proyecto */
 .banner-encabezado {
-    height: 100px;
-    background-color: var(--green-principal, var(--green-lime));
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.banner-encabezado .imagen-detalle {
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: center;
 }
 
 
@@ -358,13 +397,6 @@ body {
 
 .tarjeta-seccion h3 {
     margin-bottom: 4px;
-}
-.tarjeta-encabezado {
-    background-color: var(--card);
-    border: none;
-    border-radius: var(--radius);
-    padding: 24px;
-    margin-bottom: 20px;
 }
 
 .stats-encabezado {
@@ -408,16 +440,32 @@ body {
     line-height: 1.6;
 }
 
+
+
 .detalle-contenedor {
+    width: calc(100% - 40px);
+    max-width: 700px;
+    box-sizing: border-box;
+
+    margin: 20px auto;
+    padding: 24px;
+
     background-color: var(--card2);
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 32px;
-    max-width: 700px;
-    margin: 0 auto;
     box-shadow: var(--shadow);
 }
+
+.detalle-contenedor > .tarjeta-encabezado,
+.detalle-contenedor > .tarjeta-seccion {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+
+
 .progreso-actividades {
     display: flex;
     margin-top: 12px;
@@ -760,6 +808,21 @@ body {
     background-color: var(--bg);
     font-size: 13px;
     color: var(--text);
+}
+
+.detalle-contenedor > .tarjeta-seccion {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .detalle-contenedor {
+        padding: 16px;
+    }
+
+    .objetivos-contenedor {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ========================= */

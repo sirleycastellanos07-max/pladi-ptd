@@ -41,42 +41,64 @@
 </div>
 
 
-        <div class="contenedor-tarjetas">
+
+<div class="contenedor-tarjetas">
+
     {% for proyecto, integrantes, porcentaje, estado in lista_proyectos %}
 
     <div class="tarjeta">
-    <div class="banner-tarjeta">
-    <span class="icono-tarjeta">{{ proyecto[9] }}</span>
-    </div>
-    <span class="estado">{{ estado }}</span>
-    <a href="/proyecto/{{ proyecto[0] }}"><h3>{{ proyecto[1] }}</h3></a>
-    
 
-    <div class="lista-integrantes">
-        {% for i in integrantes %}
-            <div class="integrante-mini">
-                <span class="avatar-mini">{{ i[1] }}</span>
-                <span>{{ i[0] }}</span>
-            </div>
-        {% endfor %}
-    </div>
-    
-    <div class="pie-tarjeta">
-        <div class="barra-progreso-contenedor">
-            <div class="barra-progreso-relleno" style="width: {{ porcentaje }}%;"></div>
+        <div class="banner-tarjeta">
+            
+            <img
+                src="{{ url_for('static', filename='imagenes/' ~ proyecto[0] ~ '.jpeg') }}"
+                alt="Imagen del proyecto {{ proyecto[1] }}"
+                class="imagen-tarjeta"
+                onerror="this.style.display='none'"
+            >
+
         </div>
-        <p class="integrantes">progreso: {{ porcentaje | round(1) }}%</p>
-    </div>
+
+        <span class="estado">{{ estado }}</span>
+
+        <a href="/proyecto/{{ proyecto[0] }}">
+            <h3>{{ proyecto[1] }}</h3>
+        </a>
+
+        <div class="lista-integrantes">
+            {% for i in integrantes %}
+                <div class="integrante-mini">
+                    <span class="avatar-mini">{{ i[1] }}</span>
+                    <span>{{ i[0] }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="pie-tarjeta">
+            <div class="barra-progreso-contenedor">
+                <div
+                    class="barra-progreso-relleno"
+                    style="width: {{ porcentaje }}%;"></div>
+            </div>
+
+            <p class="integrantes">
+                progreso: {{ porcentaje | round(1) }}%
+            </p>
+        </div>
+
     </div>
 
     {% endfor %}
 
     <div class="registro-cta">
         <p>¿No encuentras tu proyecto en la lista?</p>
-        <a href="/registro" class="btn-principal">Registrar mi proyecto</a>
+        <a href="/registro" class="btn-principal">
+            Registrar mi proyecto
+        </a>
     </div>
 
-    </div>
+</div>
+
         
     
     

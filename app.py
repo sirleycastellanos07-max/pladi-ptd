@@ -3,9 +3,34 @@ from db import get_conexion
 from utilidades import nombre_corto, inicial_avatar, calcular_progreso
 from flask import Flask, render_template, request, redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from consultas import obtener_proyectos_sin_cuenta
+from consultas import (
+    obtener_proyectos_sin_cuenta,
+    obtener_proyectos_destacados,
+    obtener_proyectos,
+    obtener_proyectos_por_grado,
+    obtener_integrantes,
+    obtener_progreso,
+    obtener_proyecto_por_id,
+    obtener_objetivos,
+    obtener_documentos,
+    obtener_galeria,
+    obtener_proyecto_para_editar,
+    obtener_objetivos_para_editar,
+    obtener_galeria_para_editar,
+    obtener_documentos_para_editar,
+    obtener_integrantes_para_editar,
+    obtener_usuario_login,
+    actualizar_proyecto,
+    guardar_integrantes,
+    guardar_objetivos,
+    actualizar_proyecto,
+    guardar_foto_galeria,
+    actualizar_documento,
+
+)
 from werkzeug.utils import secure_filename
 import os
+from flask import session, redirect, url_for    
 
 app = Flask(__name__)
 app.secret_key = "cambia_esto_por_un_texto_secreto_largo_y_unico"
@@ -13,16 +38,8 @@ app.secret_key = "cambia_esto_por_un_texto_secreto_largo_y_unico"
 
 @app.route('/index')
 def index():
-    conexion = get_conexion()
-    cursor = conexion.cursor()
-    cursor.execute("SELECT id, titulo, grado, grupo FROM proyectos LIMIT 3")
-    destacados = cursor.fetchall()
-    cursor.close()
-    conexion.close()
-    return render_template('index.html', destacados=destacados)
-
-
-    
+    destacados = obtener_proyectos_destacados()
+    return render_template('index.html', destacados=destacados) 
 
 @app.route('/calendario')
 def calendario():
@@ -32,33 +49,28 @@ def calendario():
 def nosotros():
     return render_template('nosotros.html')
 
+
 @app.route('/proyectos')
 def proyectos():
-    conexion = get_conexion()
-    cursor = conexion.cursor()
     grado_filtro = request.args.get('grado')
 
     if grado_filtro:
-        cursor.execute("SELECT * FROM proyectos WHERE grado = %s", (grado_filtro,))
+        proyectos_db = obtener_proyectos_por_grado(grado_filtro)
     else:
-        cursor.execute("SELECT * FROM proyectos")
-    proyectos_db = cursor.fetchall()
+        proyectos_db = obtener_proyectos()
 
     lista_completa = []
+
     for p in proyectos_db:
-        cursor.execute("SELECT nombre FROM integrantes WHERE id_proyecto = %s", (p[0],))
-        integrantes_raw = cursor.fetchall()
+        integrantes_raw = obtener_integrantes(p[0])
         integrantes = [(nombre_corto(i[0]), inicial_avatar(i[0])) for i in integrantes_raw]
 
-        cursor.execute("SELECT nombre_paso, estado FROM progreso WHERE id_proyecto = %s", (p[0],))
-        pasos = cursor.fetchall()
-
+        pasos = obtener_progreso(p[0])
         porcentaje, estado = calcular_progreso(pasos)
 
         lista_completa.append((p, integrantes, porcentaje, estado))
 
-    conexion.close()
-    return render_template('proyectos.html', lista_proyectos=lista_completa, grado_filtro=grado_filtro)
+    return render_template('proyectos.html',lista_proyectos=lista_completa,grado_filtro=grado_filtro)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -66,11 +78,7 @@ def login():
         usuario = request.form.get('usuario')
         contrasena = request.form.get('contrasena')
 
-        conexion = get_conexion()
-        cursor = conexion.cursor()
-        cursor.execute("SELECT id, contrasena, id_proyecto FROM usuarios WHERE nombre_usuario = %s", (usuario,))
-        resultado = cursor.fetchone()
-        conexion.close()
+        resultado = obtener_usuario_login(usuario)
 
         if resultado and check_password_hash(resultado[1], contrasena):
             session['id_proyecto'] = resultado[2]
@@ -81,6 +89,11 @@ def login():
 
     return render_template('login.html', error=None)
 
+@app.route('/cerrar-sesion')
+def cerrar_sesion():
+    session.clear()
+    return redirect(url_for('index'))
+
 
 @app.route('/proyecto/<int:id_proyecto>/editar', methods=['GET', 'POST'])
 def editar(id_proyecto):
@@ -90,80 +103,72 @@ def editar(id_proyecto):
     if session['id_proyecto'] != id_proyecto:
         return "No tienes permiso para editar este proyecto", 403
 
-    conexion = get_conexion()
-    cursor = conexion.cursor()
-
     if request.method == 'POST':
         titulo = request.form.get('titulo')
         descripcion = request.form.get('descripcion')
         objetivo_general = request.form.get('objetivo_general')
 
-        cursor.execute(
-            "UPDATE proyectos SET titulo = %s, descripcion = %s, objetivo_general = %s WHERE id = %s",
-            (titulo, descripcion, objetivo_general, id_proyecto)
+        actualizar_proyecto(
+            id_proyecto, titulo, descripcion, objetivo_general
         )
 
         nombres_integrantes = request.form.getlist('integrantes[]')
-        nombres_integrantes = [n.strip() for n in nombres_integrantes if n.strip()]
-
-        cursor.execute("DELETE FROM integrantes WHERE id_proyecto = %s", (id_proyecto,))
-        for nombre in nombres_integrantes:
-            cursor.execute("INSERT INTO integrantes (id_proyecto, nombre) VALUES (%s, %s)", (id_proyecto, nombre))
+        nombres_integrantes = [
+            n.strip() for n in nombres_integrantes if n.strip()
+        ]
+        guardar_integrantes(id_proyecto, nombres_integrantes)
 
         objetivos_especificos = request.form.getlist('objetivos[]')
-        objetivos_especificos = [o.strip() for o in objetivos_especificos if o.strip()]
+        objetivos_especificos = [
+            o.strip() for o in objetivos_especificos if o.strip()
+        ]
+        guardar_objetivos(id_proyecto, objetivos_especificos)
 
-        cursor.execute("DELETE FROM objetivos_especificos WHERE id_proyecto = %s", (id_proyecto,))
-        for objetivo in objetivos_especificos:
-            cursor.execute("INSERT INTO objetivos_especificos (id_proyecto, descripcion) VALUES (%s, %s)", (id_proyecto, objetivo))
-
-        # --- Galería: fotos nuevas ---
+        # Galería: fotos nuevas
         fotos_nuevas = request.files.getlist('galeria_nuevas')
+
         for foto in fotos_nuevas:
             if foto and foto.filename != '':
                 nombre_archivo = secure_filename(foto.filename)
                 ruta_relativa = 'imagenes/' + nombre_archivo
                 foto.save(os.path.join('static', ruta_relativa))
-                cursor.execute("INSERT INTO galeria (id_proyecto, evidencias) VALUES (%s, %s)", (id_proyecto, ruta_relativa))
 
-        # --- Documentos ---
+                guardar_foto_galeria(id_proyecto, ruta_relativa)
+
+        # Documentos
         ids_documentos = request.form.getlist('documento_id[]')
         estados_documentos = request.form.getlist('documento_estado[]')
         archivos_documentos = request.files.getlist('documento_archivo[]')
+
         for i in range(len(ids_documentos)):
             doc_id = ids_documentos[i]
             nuevo_estado = estados_documentos[i]
-            archivo_doc = archivos_documentos[i]
+
+            if i < len(archivos_documentos):
+                archivo_doc = archivos_documentos[i]
+            else:
+                archivo_doc = None
+
+            ruta_relativa = None
+
             if archivo_doc and archivo_doc.filename != '':
                 nombre_archivo = secure_filename(archivo_doc.filename)
                 ruta_relativa = 'documentos/' + nombre_archivo
                 archivo_doc.save(os.path.join('static', ruta_relativa))
-                cursor.execute("UPDATE documentos SET estado = %s, archivo = %s WHERE id = %s", (nuevo_estado, ruta_relativa, doc_id))
-            else:
-                cursor.execute("UPDATE documentos SET estado = %s WHERE id = %s", (nuevo_estado, doc_id))
 
-        conexion.commit()
-        conexion.close()
+            actualizar_documento(
+                doc_id, nuevo_estado, ruta_relativa
+            )
+
         return redirect('/proyecto/' + str(id_proyecto))
 
-    cursor.execute("SELECT * FROM proyectos WHERE id = %s", (id_proyecto,))
-    proyecto = cursor.fetchone()
+    proyecto = obtener_proyecto_para_editar(id_proyecto)
+    integrantes = obtener_integrantes_para_editar(id_proyecto)
+    objetivos = obtener_objetivos_para_editar(id_proyecto)
+    galeria = obtener_galeria_para_editar(id_proyecto)
+    documentos = obtener_documentos_para_editar(id_proyecto)
 
-    cursor.execute("SELECT nombre FROM integrantes WHERE id_proyecto = %s", (id_proyecto,))
-    integrantes = cursor.fetchall()
-
-    cursor.execute("SELECT descripcion FROM objetivos_especificos WHERE id_proyecto = %s", (id_proyecto,))
-    objetivos = cursor.fetchall()
-
-    cursor.execute("SELECT id, evidencias FROM galeria WHERE id_proyecto = %s ORDER BY id", (id_proyecto,))
-    galeria = cursor.fetchall()
-
-    cursor.execute("SELECT id, nombre, estado, archivo FROM documentos WHERE id_proyecto = %s ORDER BY id", (id_proyecto,))
-    documentos = cursor.fetchall()
-
-    conexion.close()
-
-    return render_template('editar.html', proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, galeria=galeria, documentos=documentos)
+    return render_template('editar.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, galeria=galeria, documentos=documentos)
 
 @app.route('/logout')
 def logout():
@@ -251,35 +256,28 @@ def crear_cuenta():
     conexion.close()
     return render_template('crear_cuenta.html', error=None, proyectos=obtener_proyectos_sin_cuenta())
 
+
 @app.route('/proyecto/<int:id_proyecto>')
 def detalle(id_proyecto):
-    conexion = get_conexion()
-    cursor = conexion.cursor()
+    proyecto = obtener_proyecto_por_id(id_proyecto)
 
-    cursor.execute("SELECT * FROM proyectos WHERE id = %s", (id_proyecto,))
-    proyecto = cursor.fetchone()
+    if proyecto is None:
+        return "Proyecto no encontrado", 404
 
-    cursor.execute("SELECT nombre FROM integrantes WHERE id_proyecto = %s", (id_proyecto,))
-    integrantes_raw = cursor.fetchall()
-    integrantes = [(nombre_corto(i[0]), inicial_avatar(i[0])) for i in integrantes_raw]
+    integrantes_raw = obtener_integrantes(id_proyecto)
+    integrantes = [
+        (nombre_corto(i[0]), inicial_avatar(i[0]))
+        for i in integrantes_raw
+    ]
 
-    cursor.execute("SELECT descripcion FROM objetivos_especificos WHERE id_proyecto = %s", (id_proyecto,))
-    objetivos = cursor.fetchall()
+    objetivos = obtener_objetivos(id_proyecto)
+    documentos = obtener_documentos(id_proyecto)
+    galeria = obtener_galeria(id_proyecto)
 
-    cursor.execute("SELECT nombre, estado, archivo FROM documentos WHERE id_proyecto = %s", (id_proyecto,))
-    documentos = cursor.fetchall()
-
-    cursor.execute("SELECT evidencias FROM galeria WHERE id_proyecto = %s", (id_proyecto,))
-    galeria = cursor.fetchall()
-    cursor.execute("SELECT nombre_paso, estado FROM progreso WHERE id_proyecto = %s", (id_proyecto,))
-    progreso = cursor.fetchall()
+    progreso = obtener_progreso(id_proyecto)
     porcentaje, estado = calcular_progreso(progreso)
 
-    conexion.close()
-
-    return render_template('detalle.html', proyecto=proyecto, integrantes=integrantes,
-                            objetivos=objetivos, documentos=documentos, galeria=galeria, progreso=progreso, porcentaje=porcentaje, estado=estado)
-
+    return render_template('detalle.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, documentos=documentos, galeria=galeria, progreso=progreso, porcentaje=porcentaje, estado=estado)
 
 if __name__ == '__main__':
     app.run(debug=True)

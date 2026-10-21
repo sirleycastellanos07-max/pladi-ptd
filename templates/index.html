@@ -141,10 +141,11 @@
                 <h3>{{ proyecto[1] }}</h3>
 
                 <p>
+                  Grado: {{ proyecto[1] }}
                   Grado: {{ proyecto[2] }}<br>
                   Grupo: {{ proyecto[3] }}
                 </p>
-                <a href="#"> Ver proyecto →</a>
+                <a href="{{ url_for('detalle', id_proyecto=proyecto[0]) }}"> Ver proyecto →</a>
             </div>
         </div>
         {% endfor %}

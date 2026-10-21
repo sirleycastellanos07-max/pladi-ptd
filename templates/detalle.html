@@ -13,7 +13,7 @@
 
       <a href="incio" class="marca">
         <!-- LOGO: si cambian la imagen, solo cambien el nombre del archivo en src -->
-        <img src="escude.jpeg" alt="Logo de PLADI-PTD" class="marca-logo">
+        <img src="{{ url_for('static', filename='imagenes/escude.jpeg') }}" alt="Logo de PLADI-PTD" class="marca-logo">
         <div>
           <h2 class="marca-nombre">PLADI-PTD</h2>
           <p class="marca-frase">Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
@@ -27,7 +27,7 @@
             <li><a href="/nosotros">Nosotros</a></li>
                 {% if session.usuario %}
                     <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
-                    <li><a href="/logout">Cerrar sesión</a></li>
+                    <a href="{{ url_for('cerrar_sesion') }}">Cerrar sesión</a>
                 {% else %}
                     <li><a href="/crear-cuenta">Crear cuenta</a></li>
                     <li><a href="/login">Iniciar sesión</a></li>
@@ -37,12 +37,21 @@
 </header>
 
 
-    <div class="detalle-contenedor">
 
-      <div class="tarjeta-encabezado">
+<div class="detalle-contenedor">
+
+    <!-- ENCABEZADO DEL PROYECTO -->
+    <div class="tarjeta-encabezado">
+
         <div class="banner-encabezado">
-            <span class="icono-encabezado">{{ proyecto[9] }}</span>
+            <img
+                src="{{ url_for('static', filename='imagenes/' ~ proyecto[0] ~ '.jpeg') }}"
+                alt="Imagen del proyecto {{ proyecto[1] }}"
+                class="imagen-detalle"
+                onerror="this.style.display='none'"
+            >
         </div>
+
         <div class="contenido-encabezado">
             <span class="estado">{{ estado }}</span>
             <h1>{{ proyecto[1] }}</h1>
@@ -53,111 +62,135 @@
                     <span class="stat-numero">{{ integrantes | length }}</span>
                     <span class="stat-label">Integrantes</span>
                 </div>
+
                 <div class="stat">
                     <span class="stat-numero">{{ porcentaje | round(0) }}%</span>
                     <span class="stat-label">Avance</span>
                 </div>
+
                 <div class="stat">
                     <span class="stat-numero">{{ proyecto[6] }}</span>
                     <span class="stat-label">Año</span>
                 </div>
             </div>
+
             {% if session.id_proyecto == proyecto[0] %}
-                <a href="/proyecto/{{ proyecto[0] }}/editar" class="btn-editar-proyecto">✏️ Editar mi proyecto</a>
+                <a href="/proyecto/{{ proyecto[0] }}/editar"
+                   class="btn-editar-proyecto">
+                    ✏️ Editar mi proyecto
+                </a>
             {% endif %}
         </div>
     </div>
 
-
- <div class="tarjeta-seccion">
-    <h3>Integrantes</h3>
-    <div class="lista-integrantes">
-        {% for i in integrantes %}
-            <div class="integrante-mini">
-                <span class="avatar-mini">{{ i[1] }}</span>
-                <span>{{ i[0] }}</span>
-            </div>
-        {% endfor %}
-    </div>
- </div>
-
-  <div class="tarjeta-seccion">
-    <h3>Progreso del proyecto</h3>
-    <div class="progreso-actividades">
-        {% for paso in progreso %}
-            <div class="actividad">
-                <div class="bloque-color
-                    {% if paso[1] == 'Completado' %} completado
-                    {% elif paso[1] == 'En proceso' %} en-proceso
-                    {% elif paso[1] == 'Con observaciones' %} con-observaciones
-                    {% endif %}">
+    <!-- INTEGRANTES -->
+    <div class="tarjeta-seccion">
+        <h3>Integrantes</h3>
+        <div class="lista-integrantes">
+            {% for i in integrantes %}
+                <div class="integrante-mini">
+                    <span class="avatar-mini">{{ i[1] }}</span>
+                    <span>{{ i[0] }}</span>
                 </div>
-                <span class="paso-nombre">{{ paso[0] }}</span>
-            </div>
-        {% endfor %}
-    </div>
-    <div class="leyenda-progreso">
-        <div class="leyenda-item"><span class="punto completado"></span> Completado</div>
-        <div class="leyenda-item"><span class="punto en-proceso"></span> En proceso</div>
-        <div class="leyenda-item"><span class="punto con-observaciones"></span> Con observaciones</div>
-        <div class="leyenda-item"><span class="punto pendiente"></span> Pendiente</div>
-    </div>
-  </div>
-
-   <div class="tarjeta-seccion">
-    <h3>Objetivos</h3>
-    <div class="objetivos-contenedor">
-        <div class="tarjeta-objetivo">
-            <h4>General</h4>
-            <p class="descripcion">{{ proyecto[3] }}</p>
-        </div>
-        <div class="tarjeta-objetivo">
-            <h4>Específicos</h4>
-            <ul class="lista-objetivos">
-                {% for o in objetivos %}
-                    <li>{{ o[0] }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-   </div>
-
-  <div class="tarjeta-seccion">
-   <h3>Cronograma</h3>
-        <img class="imagen-cronograma" src="{{ url_for('static', filename=proyecto[8]) }}">
-    </div>
-  
-
-   <div class="tarjeta-seccion">
-        <h3>Galería</h3>
-        <div class="galeria">
-            {% for g in galeria %}
-                <img src="{{ url_for('static', filename=g[0]) }}">
             {% endfor %}
         </div>
     </div>
 
-   <div class="tarjeta-seccion">
-     <h3>Documentos</h3>
-    <div class="lista-documentos">
-        {% for d in documentos %}
-            <div class="fila-documento">
-                <span class="nombre-documento">{{ d[0] }}</span>
-                <div class="fila-documento-derecha">
-                    <span class="etiqueta-documento
-                        {% if 'Aprob' in d[1] %} aprobado
-                        {% elif 'revis' in d[1] %} en-revision
+    <!-- PROGRESO -->
+    <div class="tarjeta-seccion">
+        <h3>Progreso del proyecto</h3>
+
+        <div class="progreso-actividades">
+            {% for paso in progreso %}
+                <div class="actividad">
+                    <div class="bloque-color
+                        {% if paso[1] == 'Completado' %}completado
+                        {% elif paso[1] == 'En proceso' %}en-proceso
+                        {% elif paso[1] == 'Con observaciones' %}con-observaciones
                         {% endif %}">
-                        {{ d[1] }}
-                    </span>
-                    {% if d[2] %}
-                        <a href="{{ url_for('static', filename=d[2]) }}" class="btn-descargar" download>Descargar</a>
-                    {% endif %}
+                    </div>
+                    <span class="paso-nombre">{{ paso[0] }}</span>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div class="leyenda-progreso">
+            <div class="leyenda-item"><span class="punto completado"></span> Completado</div>
+            <div class="leyenda-item"><span class="punto en-proceso"></span> En proceso</div>
+            <div class="leyenda-item"><span class="punto con-observaciones"></span> Con observaciones</div>
+            <div class="leyenda-item"><span class="punto pendiente"></span> Pendiente</div>
+        </div>
     </div>
-   </div>
+
+    <!-- OBJETIVOS -->
+    <div class="tarjeta-seccion">
+        <h3>Objetivos</h3>
+
+        <div class="objetivos-contenedor">
+            <div class="tarjeta-objetivo">
+                <h4>General</h4>
+                <p class="descripcion">{{ proyecto[3] }}</p>
+            </div>
+
+            <div class="tarjeta-objetivo">
+                <h4>Específicos</h4>
+                <ul class="lista-objetivos">
+                    {% for o in objetivos %}
+                        <li>{{ o[0] }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- CRONOGRAMA -->
+    <div class="tarjeta-seccion">
+        <h3>Cronograma</h3>
+        <img class="imagen-cronograma"
+             src="{{ url_for('static', filename=proyecto[8]) }}"
+             alt="Cronograma del proyecto">
+    </div>
+
+    <!-- GALERÍA -->
+    <div class="tarjeta-seccion">
+        <h3>Galería</h3>
+        <div class="galeria">
+            {% for g in galeria %}
+                <img src="{{ url_for('static', filename=g[0]) }}"
+                     alt="Imagen de la galería">
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- DOCUMENTOS -->
+    <div class="tarjeta-seccion">
+        <h3>Documentos</h3>
+        <div class="lista-documentos">
+            {% for d in documentos %}
+                <div class="fila-documento">
+                    <span class="nombre-documento">{{ d[0] }}</span>
+
+                    <div class="fila-documento-derecha">
+                        <span class="etiqueta-documento
+                            {% if 'Aprob' in d[1] %}aprobado
+                            {% elif 'revis' in d[1] %}en-revision
+                            {% endif %}">
+                            {{ d[1] }}
+                        </span>
+
+                        {% if d[2] %}
+                            <a href="{{ url_for('static', filename=d[2]) }}"
+                               class="btn-descargar" download>
+                                Descargar
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
    
 </body>
 </html>

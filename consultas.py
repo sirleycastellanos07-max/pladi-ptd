@@ -1,20 +1,182 @@
-from db import get_conexion
+from db import consultar, ejecutar, get_conexion
 
+
+
+def obtener_proyectos_destacados():
+    return consultar("""
+        SELECT id, titulo, grado, grupo
+        FROM proyectos
+        LIMIT 3
+    """)
+
+def obtener_proyectos():
+    return consultar("SELECT * FROM proyectos")
+
+
+def obtener_integrantes(id_proyecto):
+    return consultar(
+        "SELECT nombre FROM integrantes WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_progreso(id_proyecto):
+    return consultar(
+        "SELECT nombre_paso, estado FROM progreso WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_proyectos_por_grado(grado):
+    return consultar(
+        "SELECT * FROM proyectos WHERE grado = %s",
+        (grado,)
+    )
+
+def obtener_proyecto_por_id(id_proyecto):
+    return consultar("SELECT * FROM proyectos WHERE id = %s",(id_proyecto,),uno=True)
+
+def obtener_objetivos(id_proyecto):
+    return consultar(
+        "SELECT descripcion FROM objetivos_especificos WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_documentos(id_proyecto):
+    return consultar(
+        "SELECT nombre, estado, archivo FROM documentos WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_galeria(id_proyecto):
+    return consultar(
+        "SELECT evidencias FROM galeria WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
 
 def obtener_proyectos_sin_cuenta():
-    """
-    Devuelve la lista de proyectos que todavía no tienen
-    ningún usuario asociado, usando LEFT JOIN contra la tabla usuarios.
-    """
-    conexion = get_conexion()
-    cursor = conexion.cursor()
-    cursor.execute("""
+    return consultar("""
         SELECT proyectos.id, proyectos.titulo
         FROM proyectos
         LEFT JOIN usuarios ON proyectos.id = usuarios.id_proyecto
         WHERE usuarios.id IS NULL
         ORDER BY proyectos.titulo
     """)
-    resultado = cursor.fetchall()
-    conexion.close()
-    return resultado
+
+def obtener_proyecto_para_editar(id_proyecto):
+    return consultar(
+        "SELECT * FROM proyectos WHERE id = %s",
+        (id_proyecto,),
+        uno=True
+    )
+
+def obtener_objetivos_para_editar(id_proyecto):
+    return consultar(
+        "SELECT descripcion FROM objetivos_especificos WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_galeria_para_editar(id_proyecto):
+    return consultar(
+        "SELECT id, evidencias FROM galeria WHERE id_proyecto = %s ORDER BY id",
+        (id_proyecto,)
+    )
+
+def obtener_documentos_para_editar(id_proyecto):
+    return consultar(
+        "SELECT id, nombre, estado, archivo FROM documentos WHERE id_proyecto = %s ORDER BY id",
+        (id_proyecto,)
+    )
+
+def obtener_integrantes_para_editar(id_proyecto):
+    return consultar(
+        "SELECT nombre FROM integrantes WHERE id_proyecto = %s",
+        (id_proyecto,)
+    )
+
+def obtener_usuario_login(usuario):
+    return consultar(
+        "SELECT id, contrasena, id_proyecto FROM usuarios WHERE nombre_usuario = %s",
+        (usuario,),
+        uno=True
+    )
+
+def actualizar_proyecto(id_proyecto, titulo, descripcion, objetivo_general):
+    ejecutar(
+        """
+        UPDATE proyectos
+        SET titulo = %s, descripcion = %s, objetivo_general = %s WHERE id = %s """,
+        (titulo, descripcion, objetivo_general, id_proyecto)
+    )
+
+def guardar_integrantes(id_proyecto, nombres):
+    conexion = get_conexion()
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute(
+            "DELETE FROM integrantes WHERE id_proyecto = %s",
+            (id_proyecto,)
+        )
+
+        for nombre in nombres:
+            cursor.execute(
+                "INSERT INTO integrantes (id_proyecto, nombre) VALUES (%s, %s)",
+                (id_proyecto, nombre)
+            )
+
+        conexion.commit()
+
+    except Exception:
+        conexion.rollback()
+        raise
+
+    finally:
+        cursor.close()
+        conexion.close()
+
+def guardar_objetivos(id_proyecto, objetivos):
+    conexion = get_conexion()
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute(
+            "DELETE FROM objetivos_especificos WHERE id_proyecto = %s",
+            (id_proyecto,)
+        )
+
+        for objetivo in objetivos:
+            cursor.execute(
+                "INSERT INTO objetivos_especificos (id_proyecto, descripcion) VALUES (%s, %s)",
+                (id_proyecto, objetivo)
+            )
+
+        conexion.commit()
+
+    except Exception:
+        conexion.rollback()
+        raise
+
+    finally:
+        cursor.close()
+        conexion.close()
+
+def guardar_foto_galeria(id_proyecto, ruta_relativa):
+    ejecutar(
+        "INSERT INTO galeria (id_proyecto, evidencias) VALUES (%s, %s)",
+        (id_proyecto, ruta_relativa)
+    )
+
+def actualizar_documento(doc_id, nuevo_estado, ruta_relativa=None):
+    if ruta_relativa:
+        ejecutar(
+            "UPDATE documentos SET estado = %s, archivo = %s WHERE id = %s",
+            (nuevo_estado, ruta_relativa, doc_id)
+        )
+    else:
+        ejecutar(
+            "UPDATE documentos SET estado = %s WHERE id = %s",
+            (nuevo_estado, doc_id)
+        )
+
+
+
+
