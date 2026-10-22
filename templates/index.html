@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -5,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PLADI-PTD | Inicio</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='stiles.css') }}">
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
-
+  <link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='imagenes/favicon.png') }}">
 </head>
+
 <body>
 
   <!-- ENCABEZADO -->
@@ -35,6 +39,14 @@
 
   <!-- PORTADA -->
   <section class="hero">
+
+    <!-- IMAGEN DE LA PORTADA -->
+    <img
+      src="{{ url_for('static', filename='imagenes/litame.jpeg') }}"
+      alt="Institución Educativa Liceo Tame"
+      class="hero-img"
+    >
+
     <div class="hero-contenido">
       <p class="hero-lugar">TAME · ARAUCA</p>
       <h1>PLADI-PTD</h1>
@@ -131,25 +143,44 @@
       <h1>Proyectos destacados</h1>
       <p class="subtitulo">Algunos de los proyectos que puedes conocer en la plataforma.</p>
 
-    <div class="proyectos-grid">
-        {% for proyecto in destacados %}
-        <div class="proyecto-card">
-            <div class="proyecto-imagen">
-                <!-- Espacio para la imagen -->
-            </div>
-            <div class="proyecto-contenido">
-                <h3>{{ proyecto[1] }}</h3>
+    
 
-                <p>
-                  Grado: {{ proyecto[1] }}
-                  Grado: {{ proyecto[2] }}<br>
-                  Grupo: {{ proyecto[3] }}
-                </p>
-                <a href="{{ url_for('detalle', id_proyecto=proyecto[0]) }}"> Ver proyecto →</a>
-            </div>
-        </div>
-        {% endfor %}
+<div class="proyectos-grid">
+    {% for proyecto in destacados %}
+    <div class="proyecto-card">
+
+        
+    <div class="proyecto-imagen">
+        {% if loop.index == 1 %}
+            <img src="{{ url_for('static', filename='imagenes/1.jpeg') }}"
+                alt="Imagen del proyecto 1">
+        {% elif loop.index == 2 %}
+            <img src="{{ url_for('static', filename='imagenes/2.jpeg') }}"
+                alt="Imagen del proyecto 2">
+        {% elif loop.index == 3 %}
+            <img src="{{ url_for('static', filename='imagenes/3.jpeg') }}"
+                alt="Imagen del proyecto 3">
+        {% endif %}
     </div>
+
+
+        <div class="proyecto-contenido">
+            <h3>{{ proyecto[1] }}</h3>
+
+            <p>
+                Grado: {{ proyecto[2] }}<br>
+                Grupo: {{ proyecto[3] }}
+            </p>
+
+            <a href="{{ url_for('detalle', id_proyecto=proyecto[0]) }}">
+                Ver proyecto →
+            </a>
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+
 
 </section>
 

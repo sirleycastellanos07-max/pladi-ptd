@@ -7,7 +7,11 @@
 
   <title>PLADI-PTD | Nosotros</title>
 
-  <link rel="icon" type="image/png" href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+  <link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+
   <link rel="stylesheet" href="{{ url_for('static', filename='stiles.css') }}">
 </head>
 
@@ -350,14 +354,49 @@
   </main>
 
 
-  <!-- PIE DE PÁGINA -->
+  <!-- PIE DE PÁGINA (reemplaza el <footer class="pie"> que ya tienes) -->
   <footer class="pie">
-    <p>
-      PLADI-PTD · Institución Educativa Liceo Tame · 2026
-    </p>
+    <div class="pie-contenido">
 
+      <div class="pie-grid">
+
+        <div class="pie-col">
+          <h3>Explora PLADI-PTD</h3>
+          <a href="index">Inicio</a>
+          <a href="proyectos">Proyectos</a>
+          <a href="calendario">Calendario</a>
+          <a href="nosotros">Nosotros</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>La plataforma</h3>
+          <a href="nosotros">Objetivo de la plataforma</a>
+          <a href="nosotros">Las creadoras</a>
+          <a href="nosotros">Directivos</a>
+          <a href="index">¿Cómo usar la plataforma?</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>La modalidad PTD</h3>
+          <a href="proyectos">Proyectos de los grupos</a>
+          <a href="proyectos">Avance de los proyectos</a>
+          <a href="calendario">Fechas importantes</a>
+        </div>
+
+        <div class="pie-col">
+          <h3>Liceo Tame</h3>
+          <p>Institución Educativa Liceo Tame</p>
+          <p>Tame, Arauca</p>
+          <a href="https://ieliceotame.edu.co/">Sitio oficial del Liceo</a>
+        </div>
+
+      </div>
+
+      <p class="pie-derechos">PLADI-PTD · Institución Educativa Liceo Tame · 2026</p>
+
+    </div>
   </footer>
 
-
+  
 </body>
 </html>

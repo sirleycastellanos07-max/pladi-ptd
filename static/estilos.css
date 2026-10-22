@@ -1,3 +1,5 @@
+
+
 /* ========================= */
 /* VARIABLES GLOBALES        */
 /* ========================= */
@@ -1026,3 +1028,184 @@ body {
     margin-bottom: 20px;
     margin-top: 20px;
 }
+
+
+/* =====================================
+   DISEÑO RESPONSIVE - CALENDARIO PLADI
+   ===================================== */
+
+.calendario__titulo,
+.calendario__descripcion {
+    overflow-wrap: anywhere;
+}
+
+.calendario__semana,
+.calendario__dias {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    width: 100%;
+}
+
+.calendario__semana > div,
+.calendario__dias > div {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.calendario__controles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    max-width: 100%;
+}
+
+.calendario__mes {
+    text-align: center;
+    overflow-wrap: anywhere;
+}
+
+.calendario__boton {
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.calendario__leyenda {
+    max-width: 100%;
+}
+
+.leyenda__elementos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.leyenda__item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+/* ===== TABLET ===== */
+@media (min-width: 601px) and (max-width: 1024px) {
+    body {
+        padding: 15px;
+    }
+
+    header {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    header nav {
+        width: 100%;
+    }
+
+    header nav ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .calendario__dias > div {
+        min-height: 65px;
+    }
+
+    .calendario__controles {
+        gap: 12px;
+    }
+}
+
+/* ===== CELULAR ===== */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 10px;
+    }
+
+    .marca-logo {
+        width: 60px;
+        height: auto;
+    }
+
+    .marca-nombre {
+        font-size: 23px;
+    }
+
+    .marca-frase {
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    header nav,
+    header nav ul {
+        width: 100%;
+    }
+
+    header nav ul {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+        gap: 8px;
+    }
+
+    .calendario__titulo {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .calendario__descripcion {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .calendario__controles {
+        gap: 8px;
+    }
+
+    .calendario__mes {
+        font-size: 18px;
+        flex: 1;
+    }
+
+    .calendario__boton {
+        padding: 8px;
+    }
+
+    .calendario__semana > div {
+        font-size: 12px;
+        text-align: center;
+        padding: 5px 0;
+    }
+
+    .calendario__dias > div {
+        min-width: 0;
+        min-height: 48px;
+        padding: 3px;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    .leyenda__elementos {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .leyenda__item {
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+}
+
