@@ -30,10 +30,54 @@ from consultas import (
 )
 from werkzeug.utils import secure_filename
 import os
-from flask import session, redirect, url_for    
+import hmac
+import uuid
+from flask import session, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = "cambia_esto_por_un_texto_secreto_largo_y_unico"
+
+# Código que la docente entrega a los grupos para poder registrarse
+CODIGO_REGISTRO = "LICEO-28449C"
+
+# Tamaño máximo de lo que se puede subir de una vez (16 MB)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+
+EXTENSIONES_IMAGEN = {'png', 'jpg', 'jpeg', 'gif', 'webp'}
+EXTENSIONES_DOCUMENTO = {'pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt'}
+
+
+def extension_valida(archivo, permitidas):
+    nombre = archivo.filename
+    return '.' in nombre and nombre.rsplit('.', 1)[1].lower() in permitidas
+
+
+def guardar_archivo(archivo, carpeta, id_proyecto):
+    """
+    Guarda el archivo con un nombre único (para no reemplazar el de otro grupo)
+    y devuelve la ruta relativa, por ejemplo 'imagenes/p5-1a2b3c4d-foto.png'.
+    """
+    extension = archivo.filename.rsplit('.', 1)[1].lower()
+    nombre_seguro = secure_filename(archivo.filename)
+    if not nombre_seguro.lower().endswith('.' + extension):
+        nombre_seguro = 'archivo.' + extension
+
+    nombre_final = f"p{id_proyecto}-{uuid.uuid4().hex[:8]}-{nombre_seguro}"
+
+    carpeta_destino = os.path.join(app.static_folder, carpeta)
+    os.makedirs(carpeta_destino, exist_ok=True)
+    archivo.save(os.path.join(carpeta_destino, nombre_final))
+
+    return carpeta + '/' + nombre_final
+
+
+def codigo_registro_valido(codigo):
+    return hmac.compare_digest((codigo or '').strip(), CODIGO_REGISTRO)
+
+
+@app.errorhandler(413)
+def archivo_muy_grande(error):
+    return "Los archivos son muy pesados. El máximo es 16 MB en total.", 413
 
 
 @app.route('/')
@@ -105,6 +149,22 @@ def editar(id_proyecto):
         return "No tienes permiso para editar este proyecto", 403
 
     if request.method == 'POST':
+        # Revisamos primero que todos los archivos sean del tipo correcto
+        fotos_nuevas = [f for f in request.files.getlist('galeria_nuevas') if f and f.filename != '']
+        cronograma = request.files.get('cronograma')
+        archivos_documentos = request.files.getlist('documento_archivo[]')
+
+        for foto in fotos_nuevas:
+            if not extension_valida(foto, EXTENSIONES_IMAGEN):
+                return mostrar_editar(id_proyecto, 'Las fotos deben ser imágenes (png, jpg, jpeg, gif o webp).')
+
+        if cronograma and cronograma.filename != '' and not extension_valida(cronograma, EXTENSIONES_IMAGEN):
+            return mostrar_editar(id_proyecto, 'El cronograma debe ser una imagen (png, jpg, jpeg, gif o webp).')
+
+        for archivo_doc in archivos_documentos:
+            if archivo_doc and archivo_doc.filename != '' and not extension_valida(archivo_doc, EXTENSIONES_DOCUMENTO):
+                return mostrar_editar(id_proyecto, 'Los documentos deben ser pdf, Word, PowerPoint, Excel o txt.')
+
         titulo = request.form.get('titulo')
         descripcion = request.form.get('descripcion')
         objetivo_general = request.form.get('objetivo_general')
@@ -126,30 +186,18 @@ def editar(id_proyecto):
         guardar_objetivos(id_proyecto, objetivos_especificos)
 
         # Galería: fotos nuevas
-        fotos_nuevas = request.files.getlist('galeria_nuevas')
-
         for foto in fotos_nuevas:
-            if foto and foto.filename != '':
-                nombre_archivo = secure_filename(foto.filename)
-                ruta_relativa = 'imagenes/' + nombre_archivo
-                foto.save(os.path.join('static', ruta_relativa))
-
-                guardar_foto_galeria(id_proyecto, ruta_relativa)
+            ruta_relativa = guardar_archivo(foto, 'imagenes', id_proyecto)
+            guardar_foto_galeria(id_proyecto, ruta_relativa)
 
         # Cronograma
-        cronograma = request.files.get('cronograma')
-
         if cronograma and cronograma.filename != '':
-            nombre_archivo = secure_filename(cronograma.filename)
-            ruta_relativa = 'imagenes/' + nombre_archivo
-            cronograma.save(os.path.join('static', ruta_relativa))
-
+            ruta_relativa = guardar_archivo(cronograma, 'imagenes', id_proyecto)
             actualizar_cronograma(id_proyecto, ruta_relativa)
 
         # Documentos
         ids_documentos = request.form.getlist('documento_id[]')
         estados_documentos = request.form.getlist('documento_estado[]')
-        archivos_documentos = request.files.getlist('documento_archivo[]')
 
         for i in range(len(ids_documentos)):
             doc_id = ids_documentos[i]
@@ -163,9 +211,7 @@ def editar(id_proyecto):
             ruta_relativa = None
 
             if archivo_doc and archivo_doc.filename != '':
-                nombre_archivo = secure_filename(archivo_doc.filename)
-                ruta_relativa = 'documentos/' + nombre_archivo
-                archivo_doc.save(os.path.join('static', ruta_relativa))
+                ruta_relativa = guardar_archivo(archivo_doc, 'documentos', id_proyecto)
 
             actualizar_documento(
                 doc_id, nuevo_estado, ruta_relativa
@@ -173,13 +219,17 @@ def editar(id_proyecto):
 
         return redirect('/proyecto/' + str(id_proyecto))
 
+    return mostrar_editar(id_proyecto)
+
+
+def mostrar_editar(id_proyecto, error=None):
     proyecto = obtener_proyecto_para_editar(id_proyecto)
     integrantes = obtener_integrantes_para_editar(id_proyecto)
     objetivos = obtener_objetivos_para_editar(id_proyecto)
     galeria = obtener_galeria_para_editar(id_proyecto)
     documentos = obtener_documentos_para_editar(id_proyecto)
 
-    return render_template('editar.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, galeria=galeria, documentos=documentos)
+    return render_template('editar.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, galeria=galeria, documentos=documentos, error=error)
 
 @app.route('/logout')
 def logout():
@@ -194,6 +244,9 @@ def registro():
         grupo = request.form.get('grupo')
         usuario = request.form.get('usuario')
         contrasena = request.form.get('contrasena')
+
+        if not codigo_registro_valido(request.form.get('codigo')):
+            return render_template('registro.html', error='El código de registro no es correcto. Pídeselo a tu docente.')
 
         conexion = get_conexion()
         cursor = conexion.cursor()
@@ -229,13 +282,19 @@ def registro():
 
 @app.route('/crear-cuenta', methods=['GET', 'POST'])
 def crear_cuenta():
-    conexion = get_conexion()
-    cursor = conexion.cursor()
-
     if request.method == 'POST':
         id_proyecto = request.form.get('id_proyecto')
         usuario = request.form.get('usuario')
         contrasena = request.form.get('contrasena')
+
+        if not codigo_registro_valido(request.form.get('codigo')):
+            return render_template('crear_cuenta.html', error='El código de registro no es correcto. Pídeselo a tu docente.', proyectos=obtener_proyectos_sin_cuenta())
+
+        if not (id_proyecto or '').isdigit() or obtener_proyecto_por_id(int(id_proyecto)) is None:
+            return render_template('crear_cuenta.html', error='Selecciona un proyecto de la lista', proyectos=obtener_proyectos_sin_cuenta())
+
+        conexion = get_conexion()
+        cursor = conexion.cursor()
 
         cursor.execute("SELECT id FROM usuarios WHERE nombre_usuario = %s", (usuario,))
         existe_usuario = cursor.fetchone()
@@ -264,7 +323,6 @@ def crear_cuenta():
 
         return redirect('/proyecto/' + str(id_proyecto) + '/editar')
 
-    conexion.close()
     return render_template('crear_cuenta.html', error=None, proyectos=obtener_proyectos_sin_cuenta())
 
 

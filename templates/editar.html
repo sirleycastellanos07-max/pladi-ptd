@@ -29,6 +29,10 @@
         <div class="tarjeta-seccion">
             <h3>Editar mi proyecto</h3>
 
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
             <form method="POST" action="/proyecto/{{ proyecto[0] }}/editar" enctype="multipart/form-data">
                 <label for="titulo">Título</label>
                 <input type="text" id="titulo" name="titulo" value="{{ proyecto[1] }}" required>
@@ -74,7 +78,7 @@
                             <option value="En revisión" {% if d[2] == 'En revisión' %}selected{% endif %}>En revisión</option>
                             <option value="No entregado" {% if d[2] == 'No entregado' %}selected{% endif %}>No entregado</option>
                         </select>
-                        <input type="file" name="documento_archivo[]">
+                        <input type="file" name="documento_archivo[]" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt">
                     </div>
                 {% endfor %}
 
