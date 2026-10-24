@@ -31,7 +31,7 @@
             <li><a href="/nosotros">Nosotros</a></li>
                 {% if session.usuario %}
                     <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
-                    <a href="{{ url_for('cerrar_sesion') }}">Cerrar sesión</a>
+                    <li><a href="{{ url_for('cerrar_sesion') }}">Cerrar sesión</a></li>
                 {% else %}
                     <li><a href="/crear-cuenta">Crear cuenta</a></li>
                     <li><a href="/login">Iniciar sesión</a></li>
@@ -48,12 +48,15 @@
     <div class="tarjeta-encabezado">
 
         <div class="banner-encabezado">
+            {% set imagen = imagen_proyecto(proyecto[0], proyecto[4]) %}
+            {% if imagen %}
             <img
-                src="{{ url_for('static', filename='imagenes/' ~ proyecto[0] ~ '.jpeg') }}"
+                src="{{ url_for('static', filename=imagen) }}"
                 alt="Imagen del proyecto {{ proyecto[1] }}"
                 class="imagen-detalle"
                 onerror="this.style.display='none'"
             >
+            {% endif %}
         </div>
 
         <div class="contenido-encabezado">

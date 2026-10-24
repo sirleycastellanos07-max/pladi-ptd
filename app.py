@@ -1,38 +1,34 @@
-from flask import Flask, render_template, request
+import os
+import hmac
+import uuid
+from flask import Flask, render_template, request, redirect, session, url_for
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from db import get_conexion
 from utilidades import nombre_corto, inicial_avatar, calcular_progreso
-from flask import Flask, render_template, request, redirect, session
-from werkzeug.security import check_password_hash, generate_password_hash
 from consultas import (
     obtener_proyectos_sin_cuenta,
     obtener_proyectos_destacados,
     obtener_proyectos,
     obtener_proyectos_por_grado,
     obtener_integrantes,
+    obtener_todos_los_integrantes,
     obtener_progreso,
+    obtener_todo_el_progreso,
     obtener_proyecto_por_id,
     obtener_objetivos,
     obtener_documentos,
     obtener_galeria,
-    obtener_proyecto_para_editar,
-    obtener_objetivos_para_editar,
-    obtener_galeria_para_editar,
     obtener_documentos_para_editar,
-    obtener_integrantes_para_editar,
     obtener_usuario_login,
     actualizar_proyecto,
     guardar_integrantes,
     guardar_objetivos,
-    actualizar_proyecto,
     guardar_foto_galeria,
     actualizar_documento,
     actualizar_cronograma,
+    actualizar_imagen_principal,
 )
-from werkzeug.utils import secure_filename
-import os
-import hmac
-import uuid
-from flask import session, redirect, url_for
 
 app = Flask(__name__)
 app.secret_key = "cambia_esto_por_un_texto_secreto_largo_y_unico"
@@ -71,6 +67,23 @@ def guardar_archivo(archivo, carpeta, id_proyecto):
     return carpeta + '/' + nombre_final
 
 
+def imagen_proyecto(id_proyecto, imagen_principal=None):
+    """
+    Devuelve la imagen que se debe mostrar para un proyecto:
+    primero la que el grupo subió, si no la de siempre (imagenes/<id>.jpeg).
+    Si no hay ninguna, devuelve None.
+    """
+    opciones = [imagen_principal, 'imagenes/' + str(id_proyecto) + '.jpeg']
+    for ruta in opciones:
+        if ruta and os.path.exists(os.path.join(app.static_folder, ruta)):
+            return ruta
+    return None
+
+
+# Así se puede usar imagen_proyecto(...) dentro de las plantillas HTML
+app.jinja_env.globals['imagen_proyecto'] = imagen_proyecto
+
+
 def codigo_registro_valido(codigo):
     return hmac.compare_digest((codigo or '').strip(), CODIGO_REGISTRO)
 
@@ -104,13 +117,23 @@ def proyectos():
     else:
         proyectos_db = obtener_proyectos()
 
+    # Traemos todos los integrantes y el progreso de una sola vez
+    # y luego los repartimos por proyecto (así la página carga más rápido)
+    integrantes_por_proyecto = {}
+    for id_proyecto, nombre in obtener_todos_los_integrantes():
+        integrantes_por_proyecto.setdefault(id_proyecto, []).append(nombre)
+
+    progreso_por_proyecto = {}
+    for id_proyecto, nombre_paso, estado_paso in obtener_todo_el_progreso():
+        progreso_por_proyecto.setdefault(id_proyecto, []).append((nombre_paso, estado_paso))
+
     lista_completa = []
 
     for p in proyectos_db:
-        integrantes_raw = obtener_integrantes(p[0])
-        integrantes = [(nombre_corto(i[0]), inicial_avatar(i[0])) for i in integrantes_raw]
+        nombres = integrantes_por_proyecto.get(p[0], [])
+        integrantes = [(nombre_corto(n), inicial_avatar(n)) for n in nombres]
 
-        pasos = obtener_progreso(p[0])
+        pasos = progreso_por_proyecto.get(p[0], [])
         porcentaje, estado = calcular_progreso(pasos)
 
         lista_completa.append((p, integrantes, porcentaje, estado))
@@ -151,12 +174,16 @@ def editar(id_proyecto):
     if request.method == 'POST':
         # Revisamos primero que todos los archivos sean del tipo correcto
         fotos_nuevas = [f for f in request.files.getlist('galeria_nuevas') if f and f.filename != '']
+        imagen_principal = request.files.get('imagen_principal')
         cronograma = request.files.get('cronograma')
         archivos_documentos = request.files.getlist('documento_archivo[]')
 
         for foto in fotos_nuevas:
             if not extension_valida(foto, EXTENSIONES_IMAGEN):
                 return mostrar_editar(id_proyecto, 'Las fotos deben ser imágenes (png, jpg, jpeg, gif o webp).')
+
+        if imagen_principal and imagen_principal.filename != '' and not extension_valida(imagen_principal, EXTENSIONES_IMAGEN):
+            return mostrar_editar(id_proyecto, 'La imagen principal debe ser una imagen (png, jpg, jpeg, gif o webp).')
 
         if cronograma and cronograma.filename != '' and not extension_valida(cronograma, EXTENSIONES_IMAGEN):
             return mostrar_editar(id_proyecto, 'El cronograma debe ser una imagen (png, jpg, jpeg, gif o webp).')
@@ -189,6 +216,11 @@ def editar(id_proyecto):
         for foto in fotos_nuevas:
             ruta_relativa = guardar_archivo(foto, 'imagenes', id_proyecto)
             guardar_foto_galeria(id_proyecto, ruta_relativa)
+
+        # Imagen principal del proyecto
+        if imagen_principal and imagen_principal.filename != '':
+            ruta_relativa = guardar_archivo(imagen_principal, 'imagenes', id_proyecto)
+            actualizar_imagen_principal(id_proyecto, ruta_relativa)
 
         # Cronograma
         if cronograma and cronograma.filename != '':
@@ -223,13 +255,12 @@ def editar(id_proyecto):
 
 
 def mostrar_editar(id_proyecto, error=None):
-    proyecto = obtener_proyecto_para_editar(id_proyecto)
-    integrantes = obtener_integrantes_para_editar(id_proyecto)
-    objetivos = obtener_objetivos_para_editar(id_proyecto)
-    galeria = obtener_galeria_para_editar(id_proyecto)
+    proyecto = obtener_proyecto_por_id(id_proyecto)
+    integrantes = obtener_integrantes(id_proyecto)
+    objetivos = obtener_objetivos(id_proyecto)
     documentos = obtener_documentos_para_editar(id_proyecto)
 
-    return render_template('editar.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, galeria=galeria, documentos=documentos, error=error)
+    return render_template('editar.html',proyecto=proyecto, integrantes=integrantes, objetivos=objetivos, documentos=documentos, error=error)
 
 @app.route('/logout')
 def logout():

@@ -4,8 +4,9 @@ from db import consultar, ejecutar, get_conexion
 
 def obtener_proyectos_destacados():
     return consultar("""
-        SELECT id, titulo, grado, grupo
+        SELECT id, titulo, grado, grupo, imagen_principal
         FROM proyectos
+        ORDER BY id
         LIMIT 3
     """)
 
@@ -19,11 +20,17 @@ def obtener_integrantes(id_proyecto):
         (id_proyecto,)
     )
 
+def obtener_todos_los_integrantes():
+    return consultar("SELECT id_proyecto, nombre FROM integrantes ORDER BY id")
+
 def obtener_progreso(id_proyecto):
     return consultar(
         "SELECT nombre_paso, estado FROM progreso WHERE id_proyecto = %s",
         (id_proyecto,)
     )
+
+def obtener_todo_el_progreso():
+    return consultar("SELECT id_proyecto, nombre_paso, estado FROM progreso ORDER BY id")
 
 def obtener_proyectos_por_grado(grado):
     return consultar(
@@ -61,34 +68,9 @@ def obtener_proyectos_sin_cuenta():
         ORDER BY proyectos.titulo
     """)
 
-def obtener_proyecto_para_editar(id_proyecto):
-    return consultar(
-        "SELECT * FROM proyectos WHERE id = %s",
-        (id_proyecto,),
-        uno=True
-    )
-
-def obtener_objetivos_para_editar(id_proyecto):
-    return consultar(
-        "SELECT descripcion FROM objetivos_especificos WHERE id_proyecto = %s",
-        (id_proyecto,)
-    )
-
-def obtener_galeria_para_editar(id_proyecto):
-    return consultar(
-        "SELECT id, evidencias FROM galeria WHERE id_proyecto = %s ORDER BY id",
-        (id_proyecto,)
-    )
-
 def obtener_documentos_para_editar(id_proyecto):
     return consultar(
         "SELECT id, nombre, estado, archivo FROM documentos WHERE id_proyecto = %s ORDER BY id",
-        (id_proyecto,)
-    )
-
-def obtener_integrantes_para_editar(id_proyecto):
-    return consultar(
-        "SELECT nombre FROM integrantes WHERE id_proyecto = %s",
         (id_proyecto,)
     )
 
@@ -171,6 +153,12 @@ def guardar_foto_galeria(id_proyecto, ruta_relativa):
     ejecutar(
         "INSERT INTO galeria (id_proyecto, evidencias) VALUES (%s, %s)",
         (id_proyecto, ruta_relativa)
+    )
+
+def actualizar_imagen_principal(id_proyecto, ruta_relativa):
+    ejecutar(
+        "UPDATE proyectos SET imagen_principal = %s WHERE id = %s",
+        (ruta_relativa, id_proyecto)
     )
 
 def actualizar_cronograma(id_proyecto, ruta_relativa):

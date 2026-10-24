@@ -53,14 +53,15 @@
     <div class="tarjeta">
 
         <div class="banner-tarjeta">
-            
+            {% set imagen = imagen_proyecto(proyecto[0], proyecto[4]) %}
+            {% if imagen %}
             <img
-                src="{{ url_for('static', filename='imagenes/' ~ proyecto[0] ~ '.jpeg') }}"
+                src="{{ url_for('static', filename=imagen) }}"
                 alt="Imagen del proyecto {{ proyecto[1] }}"
                 class="imagen-tarjeta"
                 onerror="this.style.display='none'"
             >
-
+            {% endif %}
         </div>
 
         <span class="estado">{{ estado }}</span>

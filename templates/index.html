@@ -151,15 +151,10 @@
 
         
     <div class="proyecto-imagen">
-        {% if loop.index == 1 %}
-            <img src="{{ url_for('static', filename='imagenes/1.jpeg') }}"
-                alt="Imagen del proyecto 1">
-        {% elif loop.index == 2 %}
-            <img src="{{ url_for('static', filename='imagenes/2.jpeg') }}"
-                alt="Imagen del proyecto 2">
-        {% elif loop.index == 3 %}
-            <img src="{{ url_for('static', filename='imagenes/3.jpeg') }}"
-                alt="Imagen del proyecto 3">
+        {% set imagen = imagen_proyecto(proyecto[0], proyecto[4]) %}
+        {% if imagen %}
+            <img src="{{ url_for('static', filename=imagen) }}"
+                alt="Imagen del proyecto {{ proyecto[1] }}">
         {% endif %}
     </div>
 
