@@ -167,6 +167,51 @@ def actualizar_cronograma(id_proyecto, ruta_relativa):
         (ruta_relativa, id_proyecto)
     )
 
+def obtener_eventos():
+    return consultar("""
+        SELECT eventos.id, eventos.fecha, eventos.titulo, eventos.descripcion,
+               eventos.tipo, eventos.id_proyecto, proyectos.grupo
+        FROM eventos
+        LEFT JOIN proyectos ON proyectos.id = eventos.id_proyecto
+        ORDER BY eventos.fecha, eventos.id
+    """)
+
+def obtener_eventos_de_proyecto(id_proyecto):
+    return consultar(
+        "SELECT id, fecha, titulo, descripcion, tipo FROM eventos WHERE id_proyecto = %s ORDER BY fecha, id",
+        (id_proyecto,)
+    )
+
+def obtener_evento(id_evento):
+    return consultar(
+        "SELECT id, fecha, titulo, descripcion, tipo, id_proyecto FROM eventos WHERE id = %s",
+        (id_evento,),
+        uno=True
+    )
+
+def crear_evento(id_proyecto, fecha, titulo, descripcion, tipo):
+    ejecutar(
+        "INSERT INTO eventos (id_proyecto, fecha, titulo, descripcion, tipo) VALUES (%s, %s, %s, %s, %s)",
+        (id_proyecto, fecha, titulo, descripcion, tipo)
+    )
+
+# En actualizar y eliminar también pedimos el id_proyecto,
+# así un grupo nunca puede tocar los eventos de otro grupo
+def actualizar_evento(id_evento, id_proyecto, fecha, titulo, descripcion, tipo):
+    ejecutar(
+        """
+        UPDATE eventos
+        SET fecha = %s, titulo = %s, descripcion = %s, tipo = %s
+        WHERE id = %s AND id_proyecto = %s """,
+        (fecha, titulo, descripcion, tipo, id_evento, id_proyecto)
+    )
+
+def eliminar_evento(id_evento, id_proyecto):
+    ejecutar(
+        "DELETE FROM eventos WHERE id = %s AND id_proyecto = %s",
+        (id_evento, id_proyecto)
+    )
+
 def actualizar_documento(doc_id, nuevo_estado, ruta_relativa=None):
     if ruta_relativa:
         ejecutar(

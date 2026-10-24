@@ -434,6 +434,47 @@ body {
 }
 
 
+/*LISTA DE EVENTOS DEL MES*/
+
+/* Debajo del calendario mostramos los eventos del mes con su grupo y descripción */
+.calendario__lista {
+    margin-top: 30px;
+    padding-top: 25px;
+    border-top: 2px solid var(--gris);
+}
+
+.calendario__lista h3 {
+    font-size: 18px;
+    color: var(--negro);
+    margin-bottom: 15px;
+}
+
+.lista-eventos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lista-eventos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: var(--texto-secundario);
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+/* La fecha usa el mismo color que el evento */
+.lista-eventos__fecha {
+    margin-top: 0;
+    flex-shrink: 0;
+    font-weight: bold;
+}
+
+
 /*LEYENDA*/
 
 /* Contenedor donde explicamos qué significa cada color */

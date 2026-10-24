@@ -27,7 +27,11 @@
             <li><a href="/proyectos">Proyectos</a></li>
             <li><a href="/calendario">Calendario</a></li>
             <li><a href="/nosotros">Nosotros</a></li>
-            
+            {% if session.usuario %}
+                <li><a href="{{ url_for('mis_eventos') }}">Mis eventos</a></li>
+            {% else %}
+                <li><a href="/login">Iniciar sesión</a></li>
+            {% endif %}
         </ul>
     </nav>
 </header>
@@ -64,6 +68,13 @@
             <!-- JavaScript generará los días aquí -->
         </section>
 
+        <section class="calendario__lista">
+            <h3>Eventos del mes</h3>
+            <ul class="lista-eventos" id="listaEventos">
+                <!-- JavaScript pondrá aquí los eventos del mes -->
+            </ul>
+        </section>
+
         <section class="calendario__leyenda">
             <h3>Eventos académicos</h3>
             <div class="leyenda__elementos">
@@ -88,6 +99,10 @@
 
     </main>
 
+    <!-- Los eventos vienen de la base de datos -->
+    <script>
+        const EVENTOS = {{ eventos | tojson }};
+    </script>
     <script src="{{ url_for('static', filename='calendario.js') }}"></script>
 
 </body>

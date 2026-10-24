@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar evento - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+</head>
+
+<body>
+    <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/index">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+            <li><a href="/calendario">Calendario</a></li>
+        </ul>
+    </nav>
+</header>
+
+    <div class="login-contenedor">
+        <div class="tarjeta-seccion">
+            <h3>Editar evento</h3>
+
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('editar_evento', id_evento=id_evento) }}">
+                {% include '_formulario_evento.html' %}
+
+                <button type="submit" class="btn-principal">Guardar cambios</button>
+            </form>
+
+            <p class="enlace-secundario"><a href="{{ url_for('mis_eventos') }}">Volver a mis eventos</a></p>
+        </div>
+    </div>
+</body>
+</html>

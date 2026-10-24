@@ -42,30 +42,46 @@ const nombresMeses = [
 
 /* EVENTOS ACADÉMICOS */
 
-// Aquí guardamos las actividades que queremos mostrar
-const eventos = {
+// Los eventos llegan desde la base de datos en la variable EVENTOS
+// (la crea la página calendario.html).
+// Aquí los agrupamos por fecha, porque un mismo día puede tener
+// eventos de varios grupos.
+const eventos = {};
 
-    "2026-8-7": {
-        texto: "Seguimiento de proyecto",
-        tipo: "verde"
-    },
+for (const evento of (typeof EVENTOS !== "undefined" ? EVENTOS : [])) {
 
-    "2026-8-15": {
-        texto: "Entrega",
-        tipo: "amarillo"
-    },
-
-    "2026-8-20": {
-        texto: "Reunión",
-        tipo: "negro"
-    },
-
-    "2026-8-25": {
-        texto: "Actividad académica",
-        tipo: "gris"
+    if (!eventos[evento.fecha]) {
+        eventos[evento.fecha] = [];
     }
 
-};
+    eventos[evento.fecha].push(evento);
+}
+
+// Buscamos la lista donde se muestran los eventos del mes
+const listaEventos = document.getElementById("listaEventos");
+
+
+// Convierte un número como 7 en "07"
+function dosDigitos(numero) {
+    return String(numero).padStart(2, "0");
+}
+
+
+// Texto que se ve al pasar el mouse sobre un evento
+function textoDelEvento(evento) {
+
+    let texto = evento.titulo;
+
+    if (evento.grupo) {
+        texto += " · " + evento.grupo;
+    }
+
+    if (evento.descripcion) {
+        texto += "\n" + evento.descripcion;
+    }
+
+    return texto;
+}
 
 
 /* FUNCIÓN PARA CREAR EL CALENDARIO */
@@ -76,6 +92,9 @@ function crearCalendario() {
 
     // Primero limpiamos los días que ya estaban mostrados
     diasCalendario.innerHTML = "";
+
+    // Y también la lista de eventos del mes anterior
+    listaEventos.innerHTML = "";
 
 
     /* ACTUALIZAR TÍTULO */
@@ -172,21 +191,20 @@ function crearCalendario() {
 
         /* BUSCAR EVENTOS */
 
-        // Creamos una clave usando el año, mes y día.
-        // La usamos para buscar si existe un evento para esa fecha
+        // Creamos una clave con el año, mes y día (por ejemplo "2026-08-07").
+        // La usamos para buscar si hay eventos para esa fecha
         const claveEvento =
-            `${añoActual}-${mesActual + 1}-${dia}`;
+            `${añoActual}-${dosDigitos(mesActual + 1)}-${dosDigitos(dia)}`;
 
 
-        // Buscamos dentro de la lista de eventos si existe una actividad para ese día.
-        const evento =
-            eventos[claveEvento];
+        // Buscamos los eventos de ese día (puede haber varios).
+        const eventosDelDia =
+            eventos[claveEvento] || [];
 
 
-        /* MOSTRAR EVENTO */
+        /* MOSTRAR EVENTOS */
 
-        // Si encontramos un evento para ese día...
-        if (evento) {
+        for (const evento of eventosDelDia) {
 
             const elementoEvento =
                 document.createElement("span");
@@ -196,15 +214,38 @@ function crearCalendario() {
                 `evento--${evento.tipo}`
             );
 
-            // Colocamos el texto de la actividad.
+            // Colocamos el título de la actividad.
             elementoEvento.textContent =
-                evento.texto;
+                evento.titulo;
+
+            // Al pasar el mouse se ve el grupo y la descripción.
+            elementoEvento.title =
+                textoDelEvento(evento);
 
 
             // Agregamos el evento dentro de la casilla del día.
             elementoDia.appendChild(
                 elementoEvento
             );
+
+
+            /* AGREGAR A LA LISTA DEL MES */
+
+            const itemLista =
+                document.createElement("li");
+
+            const marca =
+                document.createElement("span");
+            marca.classList.add("evento", `evento--${evento.tipo}`, "lista-eventos__fecha");
+            marca.textContent = `${dosDigitos(dia)}/${dosDigitos(mesActual + 1)}`;
+
+            const detalle =
+                document.createElement("span");
+            detalle.textContent = textoDelEvento(evento).replace("\n", " — ");
+
+            itemLista.appendChild(marca);
+            itemLista.appendChild(detalle);
+            listaEventos.appendChild(itemLista);
 
         }
 
@@ -215,6 +256,18 @@ function crearCalendario() {
             elementoDia
         );
 
+    }
+
+
+    /* MES SIN EVENTOS */
+
+    if (listaEventos.children.length === 0) {
+
+        const vacio =
+            document.createElement("li");
+
+        vacio.textContent = "No hay eventos este mes.";
+        listaEventos.appendChild(vacio);
     }
 
 }

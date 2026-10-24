@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis eventos - PLADI-PTD</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos.css') }}">
+    <link rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{ url_for('static', filename='imagenes/favicon.png') }}">
+</head>
+
+<body>
+    <!-- ENCABEZADO -->
+  <header>
+    <div class="logo">
+        <h1>PLADI-PTD</h1>
+        <p>Plataforma Informativa de Proyectos de Programación y Tecnologías Digitales</p>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="/index">Inicio</a></li>
+            <li><a href="/proyectos">Proyectos</a></li>
+            <li><a href="/calendario">Calendario</a></li>
+            <li><a href="/proyecto/{{ session.id_proyecto }}/editar">Editar mi proyecto</a></li>
+        </ul>
+    </nav>
+</header>
+
+    <div class="login-contenedor">
+
+        <!-- EVENTOS DEL GRUPO -->
+        <div class="tarjeta-seccion">
+            <h3>Eventos de mi grupo</h3>
+            <p class="enlace-secundario">Solo tu grupo puede editar o eliminar estos eventos. Todos los visitantes los ven en el calendario.</p>
+
+            {% if eventos|length == 0 %}
+                <p class="enlace-secundario">Tu grupo todavía no tiene eventos.</p>
+            {% endif %}
+
+            {% for e in eventos %}
+                <div class="fila-editar-documento">
+                    <span class="nombre-documento-editar">
+                        <strong>{{ e[1].strftime('%d/%m/%Y') }}</strong> · {{ e[2] }}
+                        ({{ tipos.get(e[4], e[4]) }})
+                        {% if e[3] %}<br><small>{{ e[3] }}</small>{% endif %}
+                    </span>
+                    <a href="{{ url_for('editar_evento', id_evento=e[0]) }}">Editar</a>
+                    <form method="POST" action="{{ url_for('borrar_evento', id_evento=e[0]) }}"
+                          onsubmit="return confirm('¿Seguro que quieres eliminar este evento?');">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- NUEVO EVENTO -->
+        <div class="tarjeta-seccion">
+            <h3>Agregar un evento</h3>
+
+            {% if error %}
+                <p class="mensaje-error">{{ error }}</p>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('mis_eventos') }}">
+                {% include '_formulario_evento.html' %}
+
+                <button type="submit" class="btn-principal">Agregar al calendario</button>
+            </form>
+
+            <p class="enlace-secundario"><a href="/calendario">Ver el calendario</a></p>
+        </div>
+    </div>
+</body>
+</html>

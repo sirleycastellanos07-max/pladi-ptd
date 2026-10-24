@@ -1,0 +1,16 @@
+<!-- Campos del formulario de un evento. Se usa en mis_eventos.html y en editar_evento.html -->
+<label for="fecha">Fecha</label>
+<input type="date" id="fecha" name="fecha" value="{{ datos.fecha or '' }}" required>
+
+<label for="titulo">Título</label>
+<input type="text" id="titulo" name="titulo" maxlength="150" value="{{ datos.titulo or '' }}" placeholder="Ej: Entrega del anteproyecto" required>
+
+<label for="descripcion">Descripción (opcional)</label>
+<textarea id="descripcion" name="descripcion" rows="3">{{ datos.descripcion or '' }}</textarea>
+
+<label for="tipo">Tipo de evento</label>
+<select id="tipo" name="tipo">
+    {% for color, nombre in tipos.items() %}
+        <option value="{{ color }}" {% if datos.tipo == color %}selected{% endif %}>{{ nombre }}</option>
+    {% endfor %}
+</select>

@@ -1,6 +1,7 @@
 import os
 import hmac
 import uuid
+from datetime import date
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -28,6 +29,12 @@ from consultas import (
     actualizar_documento,
     actualizar_cronograma,
     actualizar_imagen_principal,
+    obtener_eventos,
+    obtener_eventos_de_proyecto,
+    obtener_evento,
+    crear_evento,
+    actualizar_evento,
+    eliminar_evento,
 )
 
 app = Flask(__name__)
@@ -99,9 +106,125 @@ def index():
     destacados = obtener_proyectos_destacados()
     return render_template('index.html', destacados=destacados) 
 
+# Colores de los eventos y lo que significa cada uno (igual que la leyenda del calendario)
+TIPOS_EVENTO = {
+    'verde': 'Actividad académica',
+    'amarillo': 'Entrega',
+    'negro': 'Reunión',
+    'gris': 'Evento institucional',
+}
+
+
 @app.route('/calendario')
 def calendario():
-    return render_template('calendario.html')
+    eventos = []
+    for e in obtener_eventos():
+        eventos.append({
+            'fecha': e[1].isoformat(),
+            'titulo': e[2],
+            'descripcion': e[3] or '',
+            'tipo': e[4] if e[4] in TIPOS_EVENTO else 'verde',
+            'grupo': e[6] or '',
+        })
+
+    return render_template('calendario.html', eventos=eventos)
+
+
+def leer_formulario_evento():
+    """
+    Lee los datos del formulario de un evento y los revisa.
+    Devuelve (datos, error). Si todo está bien, error es None.
+    """
+    datos = {
+        'fecha': (request.form.get('fecha') or '').strip(),
+        'titulo': (request.form.get('titulo') or '').strip(),
+        'descripcion': (request.form.get('descripcion') or '').strip(),
+        'tipo': request.form.get('tipo') or 'verde',
+    }
+
+    try:
+        date.fromisoformat(datos['fecha'])
+    except ValueError:
+        return datos, 'Escribe una fecha válida.'
+
+    if not datos['titulo']:
+        return datos, 'El evento necesita un título.'
+
+    if len(datos['titulo']) > 150:
+        return datos, 'El título es muy largo (máximo 150 letras).'
+
+    if datos['tipo'] not in TIPOS_EVENTO:
+        return datos, 'Elige un tipo de evento de la lista.'
+
+    return datos, None
+
+
+@app.route('/calendario/mis-eventos', methods=['GET', 'POST'])
+def mis_eventos():
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    id_proyecto = session['id_proyecto']
+    error = None
+    datos = {}
+
+    if request.method == 'POST':
+        datos, error = leer_formulario_evento()
+
+        if not error:
+            crear_evento(id_proyecto, datos['fecha'], datos['titulo'], datos['descripcion'] or None, datos['tipo'])
+            return redirect(url_for('mis_eventos'))
+
+    eventos = obtener_eventos_de_proyecto(id_proyecto)
+    return render_template('mis_eventos.html', eventos=eventos, tipos=TIPOS_EVENTO, error=error, datos=datos)
+
+
+@app.route('/calendario/evento/<int:id_evento>/editar', methods=['GET', 'POST'])
+def editar_evento(id_evento):
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    evento = obtener_evento(id_evento)
+
+    if evento is None:
+        return "Evento no encontrado", 404
+
+    if evento[5] != session['id_proyecto']:
+        return "No tienes permiso para editar este evento", 403
+
+    error = None
+    datos = {
+        'fecha': evento[1].isoformat(),
+        'titulo': evento[2],
+        'descripcion': evento[3] or '',
+        'tipo': evento[4],
+    }
+
+    if request.method == 'POST':
+        datos, error = leer_formulario_evento()
+
+        if not error:
+            actualizar_evento(id_evento, session['id_proyecto'], datos['fecha'], datos['titulo'], datos['descripcion'] or None, datos['tipo'])
+            return redirect(url_for('mis_eventos'))
+
+    return render_template('editar_evento.html', id_evento=id_evento, tipos=TIPOS_EVENTO, error=error, datos=datos)
+
+
+@app.route('/calendario/evento/<int:id_evento>/eliminar', methods=['POST'])
+def borrar_evento(id_evento):
+    if 'usuario' not in session:
+        return redirect('/login')
+
+    evento = obtener_evento(id_evento)
+
+    if evento is None:
+        return "Evento no encontrado", 404
+
+    if evento[5] != session['id_proyecto']:
+        return "No tienes permiso para eliminar este evento", 403
+
+    eliminar_evento(id_evento, session['id_proyecto'])
+    return redirect(url_for('mis_eventos'))
 
 @app.route('/nosotros')
 def nosotros():
