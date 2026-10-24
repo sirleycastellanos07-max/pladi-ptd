@@ -137,17 +137,24 @@ def preparar_tabla_eventos():
 
 @app.route('/calendario')
 def calendario():
+    # Si el grupo inició sesión, puede hacer clic en el calendario para editarlo
+    puede_editar = 'usuario' in session
+    mi_proyecto = session.get('id_proyecto')
+
     eventos = []
     for e in obtener_eventos():
         eventos.append({
+            'id': e[0],
             'fecha': e[1].isoformat(),
             'titulo': e[2],
             'descripcion': e[3] or '',
             'tipo': e[4] if e[4] in TIPOS_EVENTO else 'verde',
             'grupo': e[6] or '',
+            # True si el evento es del grupo que inició sesión
+            'mio': puede_editar and e[5] is not None and e[5] == mi_proyecto,
         })
 
-    return render_template('calendario.html', eventos=eventos)
+    return render_template('calendario.html', eventos=eventos, puede_editar=puede_editar)
 
 
 def leer_formulario_evento():
@@ -187,6 +194,14 @@ def mis_eventos():
     id_proyecto = session['id_proyecto']
     error = None
     datos = {}
+
+    # Si viene desde el calendario (clic en un día), la fecha ya viene llena
+    fecha_elegida = request.args.get('fecha', '')
+    try:
+        date.fromisoformat(fecha_elegida)
+        datos['fecha'] = fecha_elegida
+    except ValueError:
+        pass
 
     if request.method == 'POST':
         datos, error = leer_formulario_evento()

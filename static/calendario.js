@@ -57,6 +57,10 @@ for (const evento of (typeof EVENTOS !== "undefined" ? EVENTOS : [])) {
     eventos[evento.fecha].push(evento);
 }
 
+// Dice si el grupo inició sesión y puede editar el calendario
+const puedeEditar =
+    typeof PUEDE_EDITAR !== "undefined" && PUEDE_EDITAR;
+
 // Buscamos la lista donde se muestran los eventos del mes
 const listaEventos = document.getElementById("listaEventos");
 
@@ -197,6 +201,21 @@ function crearCalendario() {
             `${añoActual}-${dosDigitos(mesActual + 1)}-${dosDigitos(dia)}`;
 
 
+        /* CLIC EN EL DÍA PARA AGREGAR UN EVENTO */
+
+        // Solo si el grupo inició sesión
+        if (puedeEditar) {
+
+            elementoDia.classList.add("dia--editable");
+            elementoDia.title = "Agregar un evento este día";
+
+            elementoDia.addEventListener("click", function () {
+                window.location.href =
+                    "/calendario/mis-eventos?fecha=" + claveEvento;
+            });
+        }
+
+
         // Buscamos los eventos de ese día (puede haber varios).
         const eventosDelDia =
             eventos[claveEvento] || [];
@@ -221,6 +240,24 @@ function crearCalendario() {
             // Al pasar el mouse se ve el grupo y la descripción.
             elementoEvento.title =
                 textoDelEvento(evento);
+
+
+            /* CLIC EN UN EVENTO DEL GRUPO PARA EDITARLO */
+
+            if (evento.mio) {
+
+                elementoEvento.classList.add("evento--mio");
+                elementoEvento.title += "\n(Clic para editar)";
+
+                elementoEvento.addEventListener("click", function (clic) {
+
+                    // Así no se activa también el clic del día
+                    clic.stopPropagation();
+
+                    window.location.href =
+                        "/calendario/evento/" + evento.id + "/editar";
+                });
+            }
 
 
             // Agregamos el evento dentro de la casilla del día.

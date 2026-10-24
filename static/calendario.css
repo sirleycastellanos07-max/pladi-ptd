@@ -23,7 +23,8 @@
    ===================================================== */
 
   .encabezado-contenido {
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -129,11 +130,12 @@ body {
 /* Esta es la caja grande donde estará todo nuestro calendario */
 .calendario {
     width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    background-color: #152815;
+    max-width: 1000px;
+    margin: 35px auto;
+    background-color: #ffffff;
+    border: 1px solid var(--gris);
     border-radius: 20px;
-    padding: 25px;
+    padding: 30px;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
 }
 
@@ -283,7 +285,10 @@ body {
 .dia {
 
     /* Altura mínima de cada día */
-    min-height: 75px;
+    min-height: 95px;
+
+    /* Si hay muchos eventos no se salen de la casilla */
+    overflow: hidden;
 
     /* Espacio entre el contenido y los bordes */
     padding: 8px;
@@ -392,6 +397,11 @@ body {
 
     /* Hacemos el texto más grueso */
     font-weight: bold;
+
+    /* Si el título es largo se corta con "..." (completo se ve en la lista de abajo) */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
@@ -436,11 +446,19 @@ body {
 
 /*LISTA DE EVENTOS DEL MES*/
 
-/* Debajo del calendario mostramos los eventos del mes con su grupo y descripción */
-.calendario__lista {
+/* Debajo del calendario van dos columnas: la lista del mes y la leyenda */
+.calendario__pie {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
     margin-top: 30px;
     padding-top: 25px;
     border-top: 2px solid var(--gris);
+}
+
+/* La lista de eventos del mes, con su grupo y descripción */
+.calendario__lista {
+    min-width: 0;
 }
 
 .calendario__lista h3 {
@@ -480,14 +498,11 @@ body {
 /* Contenedor donde explicamos qué significa cada color */
 .calendario__leyenda {
 
-    /* Separamos la leyenda del calendario */
-    margin-top: 30px;
-
-    /* Dejamos espacio arriba */
-    padding-top: 25px;
-
-    /* Ponemos una línea para separar la leyenda */
-    border-top: 2px solid var(--gris);
+    /* Fondo suave para que se vea como una tarjeta al lado de la lista */
+    background-color: var(--card);
+    border-radius: 12px;
+    padding: 18px;
+    align-self: start;
 }
 
 
@@ -670,10 +685,14 @@ body {
         font-size: 12px;
     }
 
-    /* En celular ocultamos los eventos para
-       evitar que las tarjetas queden demasiado llenas */
-    .evento {
-        display: none;
+    /* En celular los eventos de cada día se ven como una rayita de color
+       (el nombre completo se lee en la lista de abajo) */
+    .dia .evento {
+        font-size: 0;
+        height: 6px;
+        padding: 0;
+        margin-top: 4px;
+        border-radius: 3px;
     }
 
     /* Hacemos las flechas un poco más pequeñas */
@@ -681,19 +700,6 @@ body {
         width: 38px;
         height: 38px;
     }
-    /* AJUSTE FINAL DEL CALENDARIO */
-main.calendario {
-    width: 90% !important;
-    max-width: 900px !important;
-    margin: 30px auto !important;
-    padding: 25px !important;
-    background-color: #ffffff !important;
-    border-radius: 20px !important;
-}
-main.calendario .calendario__dias,
-main.calendario .calendario__semana {
-    width: 100%;
-}
 }
 
 
@@ -742,10 +748,11 @@ main.calendario .calendario__semana {
     max-width: 100%;
 }
 
+/* En la tarjeta de la leyenda, un tipo debajo del otro */
 .leyenda__elementos {
     display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .leyenda__item {
@@ -870,8 +877,43 @@ main.calendario .calendario__semana {
         gap: 12px;
     }
 
+    /* En celular la lista y la leyenda van una debajo de la otra */
+    .calendario__pie {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .calendario {
+        width: 100%;
+        padding: 18px;
+    }
+
     .leyenda__item {
         font-size: 12px;
         overflow-wrap: anywhere;
     }
+}
+
+
+/* CALENDARIO EDITABLE (solo cuando el grupo inició sesión) */
+
+.calendario__ayuda {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background-color: var(--verde-lima);
+    color: var(--verde);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+/* Los días se pueden presionar para agregar un evento */
+.dia--editable {
+    cursor: pointer;
+}
+
+/* Los eventos del grupo tienen borde para saber que se pueden editar */
+.evento--mio {
+    cursor: pointer;
+    outline: 2px solid var(--texto);
 }
