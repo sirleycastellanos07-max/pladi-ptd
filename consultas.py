@@ -167,6 +167,50 @@ def actualizar_cronograma(id_proyecto, ruta_relativa):
         (ruta_relativa, id_proyecto)
     )
 
+def asegurar_tabla_eventos():
+    """
+    Si la tabla 'eventos' no existe, la crea y le pone los eventos
+    generales que ya tenía el calendario. Si ya existe, no hace nada.
+    Así nadie tiene que crearla a mano en phpMyAdmin.
+    """
+    conexion = get_conexion()
+    cursor = conexion.cursor()
+
+    try:
+        cursor.execute("SHOW TABLES LIKE 'eventos'")
+        if cursor.fetchone():
+            return
+
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS `eventos` (
+              `id` int(11) NOT NULL AUTO_INCREMENT,
+              `id_proyecto` int(11) DEFAULT NULL,
+              `fecha` date NOT NULL,
+              `titulo` varchar(150) NOT NULL,
+              `descripcion` text DEFAULT NULL,
+              `tipo` varchar(20) NOT NULL DEFAULT 'verde',
+              PRIMARY KEY (`id`),
+              KEY `id_proyecto` (`id_proyecto`),
+              CONSTRAINT `eventos_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyectos` (`id`) ON DELETE CASCADE
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+        """)
+
+        # Eventos generales que ya estaban en el calendario (no son de ningún grupo)
+        cursor.executemany(
+            "INSERT INTO eventos (id_proyecto, fecha, titulo, descripcion, tipo) VALUES (NULL, %s, %s, NULL, %s)",
+            [
+                ('2026-08-07', 'Seguimiento de proyecto', 'verde'),
+                ('2026-08-15', 'Entrega', 'amarillo'),
+                ('2026-08-20', 'Reunión', 'negro'),
+                ('2026-08-25', 'Actividad académica', 'gris'),
+            ]
+        )
+        conexion.commit()
+
+    finally:
+        cursor.close()
+        conexion.close()
+
 def obtener_eventos():
     return consultar("""
         SELECT eventos.id, eventos.fecha, eventos.titulo, eventos.descripcion,

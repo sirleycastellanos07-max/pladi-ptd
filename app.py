@@ -1,6 +1,7 @@
 import os
 import hmac
 import uuid
+import threading
 from datetime import date
 from flask import Flask, render_template, request, redirect, session, url_for
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -35,6 +36,7 @@ from consultas import (
     crear_evento,
     actualizar_evento,
     eliminar_evento,
+    asegurar_tabla_eventos,
 )
 
 app = Flask(__name__)
@@ -113,6 +115,24 @@ TIPOS_EVENTO = {
     'negro': 'Reunión',
     'gris': 'Evento institucional',
 }
+
+
+# La primera vez que alguien entra al calendario revisamos que exista la tabla de eventos
+tabla_eventos_lista = False
+candado_tabla_eventos = threading.Lock()
+
+
+@app.before_request
+def preparar_tabla_eventos():
+    global tabla_eventos_lista
+
+    if tabla_eventos_lista or not request.path.startswith('/calendario'):
+        return
+
+    with candado_tabla_eventos:
+        if not tabla_eventos_lista:
+            asegurar_tabla_eventos()
+            tabla_eventos_lista = True
 
 
 @app.route('/calendario')
