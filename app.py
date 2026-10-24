@@ -26,7 +26,7 @@ from consultas import (
     actualizar_proyecto,
     guardar_foto_galeria,
     actualizar_documento,
-
+    actualizar_cronograma,
 )
 from werkzeug.utils import secure_filename
 import os
@@ -36,6 +36,7 @@ app = Flask(__name__)
 app.secret_key = "cambia_esto_por_un_texto_secreto_largo_y_unico"
 
 
+@app.route('/')
 @app.route('/index')
 def index():
     destacados = obtener_proyectos_destacados()
@@ -135,6 +136,16 @@ def editar(id_proyecto):
 
                 guardar_foto_galeria(id_proyecto, ruta_relativa)
 
+        # Cronograma
+        cronograma = request.files.get('cronograma')
+
+        if cronograma and cronograma.filename != '':
+            nombre_archivo = secure_filename(cronograma.filename)
+            ruta_relativa = 'imagenes/' + nombre_archivo
+            cronograma.save(os.path.join('static', ruta_relativa))
+
+            actualizar_cronograma(id_proyecto, ruta_relativa)
+
         # Documentos
         ids_documentos = request.form.getlist('documento_id[]')
         estados_documentos = request.form.getlist('documento_estado[]')
@@ -173,7 +184,7 @@ def editar(id_proyecto):
 @app.route('/logout')
 def logout():
     session.clear()
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/registro', methods=['GET', 'POST'])
 def registro():

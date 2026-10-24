@@ -112,15 +112,23 @@ def guardar_integrantes(id_proyecto, nombres):
     cursor = conexion.cursor()
 
     try:
+        # Guardamos la foto y el rol de cada integrante para no perderlos
+        cursor.execute(
+            "SELECT nombre, foto, rol FROM integrantes WHERE id_proyecto = %s",
+            (id_proyecto,)
+        )
+        datos_anteriores = {fila[0]: (fila[1], fila[2]) for fila in cursor.fetchall()}
+
         cursor.execute(
             "DELETE FROM integrantes WHERE id_proyecto = %s",
             (id_proyecto,)
         )
 
         for nombre in nombres:
+            foto, rol = datos_anteriores.get(nombre, (None, None))
             cursor.execute(
-                "INSERT INTO integrantes (id_proyecto, nombre) VALUES (%s, %s)",
-                (id_proyecto, nombre)
+                "INSERT INTO integrantes (id_proyecto, nombre, foto, rol) VALUES (%s, %s, %s, %s)",
+                (id_proyecto, nombre, foto, rol)
             )
 
         conexion.commit()
@@ -163,6 +171,12 @@ def guardar_foto_galeria(id_proyecto, ruta_relativa):
     ejecutar(
         "INSERT INTO galeria (id_proyecto, evidencias) VALUES (%s, %s)",
         (id_proyecto, ruta_relativa)
+    )
+
+def actualizar_cronograma(id_proyecto, ruta_relativa):
+    ejecutar(
+        "UPDATE proyectos SET imagen_cronograma = %s WHERE id = %s",
+        (ruta_relativa, id_proyecto)
     )
 
 def actualizar_documento(doc_id, nuevo_estado, ruta_relativa=None):

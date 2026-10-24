@@ -15,7 +15,7 @@
   <header class="encabezado">
     <div class="encabezado-contenido">
 
-      <a href="incio" class="marca">
+      <a href="/index" class="marca">
         <!-- LOGO: si cambian la imagen, solo cambien el nombre del archivo en src -->
         <img src="{{ url_for('static', filename='imagenes/escude.jpeg') }}" alt="Logo de PLADI-PTD" class="marca-logo">
         <div>
@@ -150,9 +150,13 @@
     <!-- CRONOGRAMA -->
     <div class="tarjeta-seccion">
         <h3>Cronograma</h3>
-        <img class="imagen-cronograma"
-             src="{{ url_for('static', filename=proyecto[8]) }}"
-             alt="Cronograma del proyecto">
+        {% if proyecto[8] %}
+            <img class="imagen-cronograma"
+                 src="{{ url_for('static', filename=proyecto[8]) }}"
+                 alt="Cronograma del proyecto">
+        {% else %}
+            <p class="descripcion">Este proyecto aún no tiene cronograma.</p>
+        {% endif %}
     </div>
 
     <!-- GALERÍA -->

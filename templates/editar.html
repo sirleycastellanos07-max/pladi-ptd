@@ -29,7 +29,7 @@
         <div class="tarjeta-seccion">
             <h3>Editar mi proyecto</h3>
 
-            <form method="POST" action="/proyecto/{{ proyecto[0] }}/editar">
+            <form method="POST" action="/proyecto/{{ proyecto[0] }}/editar" enctype="multipart/form-data">
                 <label for="titulo">Título</label>
                 <input type="text" id="titulo" name="titulo" value="{{ proyecto[1] }}" required>
 
@@ -67,6 +67,9 @@
                         <input type="hidden" name="documento_id[]" value="{{ d[0] }}">
                         <span class="nombre-documento-editar">{{ d[1] }}</span>
                         <select name="documento_estado[]">
+                            {% if d[2] not in ['Aprobado', 'En revisión', 'No entregado'] %}
+                                <option value="{{ d[2] or '' }}" selected>{{ d[2] or 'Sin estado' }}</option>
+                            {% endif %}
                             <option value="Aprobado" {% if d[2] == 'Aprobado' %}selected{% endif %}>Aprobado</option>
                             <option value="En revisión" {% if d[2] == 'En revisión' %}selected{% endif %}>En revisión</option>
                             <option value="No entregado" {% if d[2] == 'No entregado' %}selected{% endif %}>No entregado</option>
